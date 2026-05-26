@@ -11,10 +11,37 @@
 </head>
 <body class="bg-slate-50 text-slate-800">
     <div class="max-w-6xl mx-auto p-4 md:p-8">
-        <header class="mb-8 text-center bg-gradient-to-r from-teal-500 to-cyan-600 p-6 rounded-2xl text-white shadow-md">
+        <header class="mb-6 text-center bg-gradient-to-r from-teal-500 to-cyan-600 p-6 rounded-2xl text-white shadow-md">
             <h1 class="text-2xl md:text-3xl font-bold mb-2">💎 SHINee WORLD VIII 首爾場週邊採買預算試算</h1>
             <p class="text-teal-50 opacity-90">調整各品項購買數量，系統會自動、即時地為您更新採購預算與分類統計。</p>
         </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="bg-gradient-to-br from-teal-50 to-emerald-50 border border-teal-100 p-4 rounded-xl shadow-sm">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">📦</span>
+                    <div>
+                        <h4 class="font-bold text-teal-900 text-sm md:text-base">▶ 線上訂會場取 (Berriz)</h4>
+                        <p class="text-xs text-teal-700 mt-0.5">時間：2026. 05. 28 (THU) 15:00 ~ 05. 31 (SUN) 14:30 [KST]</p>
+                        <a href="https://shop.berriz.in/collection/5ithiq9hwq" target="_blank" class="inline-flex items-center text-xs font-semibold text-teal-600 hover:text-teal-800 mt-2 underline break-all bg-white px-2 py-1 rounded shadow-sm">
+                            前往 Berriz 購買賣場 ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-cyan-50 to-blue-50 border border-cyan-100 p-4 rounded-xl shadow-sm">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">🚚</span>
+                    <div>
+                        <h4 class="font-bold text-cyan-900 text-sm md:text-base">▶ 線上訂八月出貨 (一般預購)</h4>
+                        <p class="text-xs text-cyan-700 mt-0.5">時間：2026. 05. 28 (THU) 15:00 ~ 06. 07 (SUN) 23:59 [KST]</p>
+                        <a href="http://linktr.ee/SHINee_merch" target="_blank" class="inline-flex items-center text-xs font-semibold text-cyan-600 hover:text-cyan-800 mt-2 underline break-all bg-white px-2 py-1 rounded shadow-sm">
+                            前往 官方 Linktree 連結 ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
@@ -76,7 +103,7 @@
                         
                         <div class="pt-4 border-t border-slate-700/60">
                             <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">🛒 已選清單快照</h4>
-                            <div id="cart-preview" class="max-h-48 overflow-y-auto space-y-1 text-xs text-slate-300 pr-1">
+                            <div id="cart-preview" class="max-h-48 overflow-y-auto space-y-2 text-xs text-slate-300 pr-1">
                                 <div class="text-slate-500 italic py-2">尚未選擇任何品項</div>
                             </div>
                         </div>
@@ -87,27 +114,27 @@
     </div>
 
     <script>
-        // 從 Excel 讀取出的週邊核心數據
+        // 將中英文拆分開來，方便換行渲染
         const products = [
-          {"id": 0, "name": "INVERT POSTCARD SET (巡演明信片組)", "type": "現場/線上同步", "krw": 12000},
-          {"id": 1, "name": "CARD WALLET SET (證件卡夾鑰匙圈組)", "type": "現場/線上同步", "krw": 55000},
-          {"id": 2, "name": "ID PHOTO SET (證件照照片組)", "type": "現場/線上同步", "krw": 10000},
-          {"id": 3, "name": "BADGE (巡演紀念金屬徽章)", "type": "現場/線上同步", "krw": 10000},
-          {"id": 4, "name": "LONG SLEEVE SET (黑色高質感長袖衛衣組)", "type": "現場/線上同步", "krw": 65000},
-          {"id": 5, "name": "LENTICULAR IMAGE PICKET (3D 變幻大扇子)", "type": "現場/線上同步", "krw": 10000},
-          {"id": 6, "name": "REVERSIBLE TOTE BAG SET (雙面用兩面托特包組)", "type": "現場/線上同步", "krw": 65000},
-          {"id": 7, "name": "RANDOM TRADING CARD SET (隨機明星卡組)", "type": "現場/線上同步", "krw": 6000},
-          {"id": 8, "name": "NECKLACE SET (巡演限定設計項鍊組)", "type": "PRE-ORDER ONLY (預購限定)", "krw": 47000},
-          {"id": 9, "name": "OFFICIAL FANLIGHT (官方手燈)", "type": "現場/線上同步", "krw": 42000},
-          {"id": 10, "name": "MINI FANLIGHT KEYRING (迷你手燈鑰匙圈)", "type": "現場/線上同步", "krw": 19000},
-          {"id": 11, "name": "T-SHIRT SET (巡演短袖 T 恤 - 黑)", "type": "現場/線上同步", "krw": 47000},
-          {"id": 12, "name": "POSTER SET (巡演海報組)", "type": "現場/線上同步", "krw": 11000},
-          {"id": 13, "name": "PAPER INCENSE SET (紙香氛禮盒組)", "type": "PRE-ORDER ONLY (預購限定)", "krw": 42000},
-          {"id": 14, "name": "OFFICIAL LIGHT TOK (手機發光氣墊支架)", "type": "現場/線上同步", "krw": 27000},
-          {"id": 15, "name": "DIGITAL CLOCK (角色數位時鐘)", "type": "PRE-ORDER ONLY (預購限定)", "krw": 19000},
-          {"id": 16, "name": "RANDOM SQUISHY KEY RING (隨機舒壓軟軟鑰匙圈)", "type": "現場/線上同步", "krw": 10000},
-          {"id": 17, "name": "HANDMADE FELT DOLL (手作感毛氈布偶吊飾)", "type": "PRE-ORDER ONLY (預購限定)", "krw": 22000},
-          {"id": 18, "name": "PEEK-UP FIGURE (趴姿公仔玩具)", "type": "現場/線上同步", "krw": 15000}
+          {"id": 0, "nameEn": "INVERT POSTCARD SET", "nameZh": "巡演明信片組", "type": "現場/線上同步", "krw": 12000},
+          {"id": 1, "nameEn": "CARD WALLET SET", "nameZh": "證件卡夾鑰匙圈組", "type": "現場/線上同步", "krw": 55000},
+          {"id": 2, "nameEn": "ID PHOTO SET", "nameZh": "證件照照片組", "type": "現場/線上同步", "krw": 10000},
+          {"id": 3, "nameEn": "BADGE", "nameZh": "巡演紀念金屬徽章", "type": "現場/線上同步", "krw": 10000},
+          {"id": 4, "nameEn": "LONG SLEEVE SET", "nameZh": "黑色高質感長袖衛衣組", "type": "現場/線上同步", "krw": 65000},
+          {"id": 5, "nameEn": "LENTICULAR IMAGE PICKET", "nameZh": "3D 變幻大扇子", "type": "現場/線上同步", "krw": 10000},
+          {"id": 6, "nameEn": "REVERSIBLE TOTE BAG SET", "nameZh": "雙面用兩面托特包組", "type": "現場/線上同步", "krw": 65000},
+          {"id": 7, "nameEn": "RANDOM TRADING CARD SET", "nameZh": "隨機明星卡組", "type": "現場/線上同步", "krw": 6000},
+          {"id": 8, "nameEn": "NECKLACE SET", "nameZh": "巡演限定設計項鍊組", "type": "PRE-ORDER ONLY (預購限定)", "krw": 47000},
+          {"id": 9, "nameEn": "OFFICIAL FANLIGHT", "nameZh": "官方手燈", "type": "現場/線上同步", "krw": 42000},
+          {"id": 10, "nameEn": "MINI FANLIGHT KEYRING", "nameZh": "迷你手燈鑰匙圈", "type": "現場/線上同步", "krw": 19000},
+          {"id": 11, "nameEn": "T-SHIRT SET", "nameZh": "巡演短袖 T 恤 - 黑", "type": "現場/線上同步", "krw": 47000},
+          {"id": 12, "nameEn": "POSTER SET", "nameZh": "巡演海報組", "type": "現場/線上同步", "krw": 11000},
+          {"id": 13, "nameEn": "PAPER INCENSE SET", "nameZh": "紙香氛禮盒組", "type": "PRE-ORDER ONLY (預購限定)", "krw": 42000},
+          {"id": 14, "nameEn": "OFFICIAL LIGHT TOK", "nameZh": "手機發光氣墊支架", "type": "現場/線上同步", "krw": 27000},
+          {"id": 15, "nameEn": "DIGITAL CLOCK", "nameZh": "角色數位時鐘", "type": "PRE-ORDER ONLY (預購限定)", "krw": 19000},
+          {"id": 16, "nameEn": "RANDOM SQUISHY KEY RING", "nameZh": "隨機舒壓軟軟鑰匙圈", "type": "現場/線上同步", "krw": 10000},
+          {"id": 17, "nameEn": "HANDMADE FELT DOLL", "nameZh": "手作感毛氈布偶吊飾", "type": "PRE-ORDER ONLY (預購限定)", "krw": 22000},
+          {"id": 18, "nameEn": "PEEK-UP FIGURE", "nameZh": "趴姿公仔玩具", "type": "現場/線上同步", "krw": 15000}
         ];
         
         let currentFilter = 'all';
@@ -127,7 +154,8 @@
                 row.className = "flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-teal-200 hover:bg-teal-50/20 transition gap-4";
                 row.innerHTML = `
                     <div class="flex-1">
-                        <div class="font-semibold text-slate-800 mb-1">${p.name}</div>
+                        <div class="font-bold text-slate-800 text-base">${p.nameEn}</div>
+                        <div class="text-sm text-slate-500 mt-0.5 mb-2">${p.nameZh}</div>
                         <div class="flex items-center gap-2">
                             <span class="text-xs px-2 py-0.5 font-medium rounded-full border ${badgeColor}">${p.type}</span>
                             <span class="text-xs text-slate-400">官方單價: ₩${p.krw.toLocaleString()}</span>
@@ -242,10 +270,13 @@
                     }
 
                     const itemPreview = document.createElement('div');
-                    itemPreview.className = "flex justify-between py-1 border-b border-slate-800/40 text-[11px]";
+                    itemPreview.className = "flex justify-between items-start py-1.5 border-b border-slate-800/40 text-[11px] gap-2";
                     itemPreview.innerHTML = `
-                        <span class="truncate max-w-[180px]">${p.name}</span>
-                        <span class="font-medium text-teal-400">x${qty} (NT$ ${itemTwd.toLocaleString()})</span>
+                        <div class="truncate max-w-[170px]">
+                            <span class="font-semibold text-slate-200 block">${p.nameEn}</span>
+                            <span class="text-slate-400 block text-[10px]">${p.nameZh}</span>
+                        </div>
+                        <span class="font-medium text-teal-400 shrink-0">x${qty}<br><span class="text-slate-400 text-[10px]">NT$ ${itemTwd.toLocaleString()}</span></span>
                     `;
                     cartPreview.appendChild(itemPreview);
                 }
