@@ -11,11 +11,13 @@
 </head>
 <body class="bg-slate-50 text-slate-800">
     <div class="max-w-6xl mx-auto p-4 md:p-8">
+        <!-- 標頭 -->
         <header class="mb-6 text-center bg-gradient-to-r from-teal-500 to-cyan-600 p-6 rounded-2xl text-white shadow-md">
             <h1 class="text-2xl md:text-3xl font-bold mb-2">💎 SHINee WORLD VIII 首爾場週邊採買試算</h1>
             <p class="text-teal-50 opacity-90">調整各品項購買數量，系統會自動、即時地為您更新採購預算與分類統計。</p>
         </header>
 
+        <!-- 官方購買連結區塊 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div class="bg-gradient-to-br from-teal-50 to-emerald-50 border border-teal-100 p-4 rounded-xl shadow-sm">
                 <div class="flex items-start gap-3">
@@ -43,7 +45,9 @@
             </div>
         </div>
 
+        <!-- 主區塊：清單與計算面板 -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- 左側與中間：品項清單 -->
             <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                 <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
                     <h2 class="text-xl font-bold text-slate-700">🛍️ 週邊品項清單</h2>
@@ -55,10 +59,13 @@
                 </div>
 
                 <div id="items-container" class="space-y-4">
-                    </div>
+                    <!-- 動態載入品項 -->
+                </div>
             </div>
 
+            <!-- 右側：控制面板與統計結果 -->
             <div class="space-y-6">
+                <!-- 參數設定 -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                     <h3 class="text-lg font-bold text-slate-700 mb-4">⚙️ 匯率與參數設定</h3>
                     <div class="space-y-4">
@@ -73,36 +80,38 @@
                     </div>
                 </div>
 
+                <!-- 預算統計摘要 -->
                 <div class="bg-gradient-to-b from-slate-800 to-slate-900 p-6 rounded-2xl text-white shadow-md sticky top-4">
-                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-teal-400">📊 預算統計摘要</h3>
+                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-teal-400" id="summary-title">📊 預算統計摘要 (全部)</h3>
                     <div class="space-y-4">
                         <div class="bg-slate-700/40 p-4 rounded-xl">
-                            <div class="text-xs text-slate-400 mb-1">總計應付台幣 (估計)</div>
+                            <div class="text-xs text-slate-400 mb-1" id="total-twd-label">當前分類總計應付台幣</div>
                             <div class="text-3xl font-extrabold text-teal-300" id="total-twd">NT$ 0</div>
                         </div>
                         <div class="grid grid-cols-2 gap-2 text-sm">
                             <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
-                                <span class="block text-xs text-slate-400">總計官方韓元</span>
+                                <span class="block text-xs text-slate-400">當前分類韓元</span>
                                 <span class="font-bold text-slate-200" id="total-krw">₩0</span>
                             </div>
                             <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
-                                <span class="block text-xs text-slate-400">已選品項總數</span>
+                                <span class="block text-xs text-slate-400">當前已選件數</span>
                                 <span class="font-bold text-slate-200" id="total-count">0 件</span>
                             </div>
                         </div>
                         <div class="pt-4 border-t border-slate-700/60 space-y-2 text-xs text-slate-300">
                             <div class="flex justify-between">
-                                <span>① 線上預購限定金額:</span>
+                                <span>① 線上預購限定金額 (不分頁面):</span>
                                 <span class="font-semibold text-amber-400" id="preorder-twd">NT$ 0</span>
                             </div>
                             <div class="flex justify-between">
-                                <span>② 現場/線上同步金額:</span>
+                                <span>② 現場/線上同步金額 (不分頁面):</span>
                                 <span class="font-semibold text-cyan-400" id="onsite-twd">NT$ 0</span>
                             </div>
                         </div>
                         
+                        <!-- 購物車清單快照 -->
                         <div class="pt-4 border-t border-slate-700/60">
-                            <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">🛒 已選清單</h4>
+                            <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">🛒 當前頁面選購快照</h4>
                             <div id="cart-preview" class="max-h-48 overflow-y-auto space-y-2 text-xs text-slate-300 pr-1">
                                 <div class="text-slate-500 italic py-2">尚未選擇任何品項</div>
                             </div>
@@ -114,7 +123,6 @@
     </div>
 
     <script>
-        // 將中英文拆分開來，方便換行渲染
         const products = [
           {"id": 0, "nameEn": "INVERT POSTCARD SET", "nameZh": "巡演明信片組", "type": "現場/線上同步", "krw": 12000},
           {"id": 1, "nameEn": "CARD WALLET SET", "nameZh": "證件卡夾鑰匙圈組", "type": "現場/線上同步", "krw": 55000},
@@ -137,6 +145,10 @@
           {"id": 18, "nameEn": "PEEK-UP FIGURE", "nameZh": "趴姿公仔玩具", "type": "現場/線上同步", "krw": 15000}
         ];
         
+        // 儲存全品項數量的物件，避免切換頁面時數量消失
+        const globalQuantities = {};
+        products.forEach(p => globalQuantities[p.id] = 0);
+
         let currentFilter = 'all';
 
         function renderItems() {
@@ -149,6 +161,7 @@
 
                 const isPreOrder = p.type.includes('PRE-ORDER');
                 const badgeColor = isPreOrder ? 'bg-amber-100 text-amber-800 border-amber-200' : 'bg-cyan-100 text-cyan-800 border-cyan-200';
+                const currentQty = globalQuantities[p.id];
 
                 const row = document.createElement('div');
                 row.className = "flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-teal-200 hover:bg-teal-50/20 transition gap-4";
@@ -168,7 +181,7 @@
                         </div>
                         <div class="flex items-center border border-slate-200 rounded-lg bg-white shadow-sm">
                             <button onclick="changeQty(${p.id}, -1)" class="px-3 py-1 text-slate-500 hover:bg-slate-50 font-bold text-lg rounded-l-lg">-</button>
-                            <input type="number" id="qty-${p.id}" value="0" min="0" max="99" oninput="validateAndCalc(${p.id})" class="w-12 text-center font-semibold bg-transparent focus:outline-none text-slate-800">
+                            <input type="number" id="qty-${p.id}" value="${currentQty}" min="0" max="99" oninput="validateAndCalc(${p.id})" class="w-12 text-center font-semibold bg-transparent focus:outline-none text-slate-800">
                             <button onclick="changeQty(${p.id}, 1)" class="px-3 py-1 text-slate-500 hover:bg-slate-50 font-bold text-lg rounded-r-lg">+</button>
                         </div>
                     </div>
@@ -180,6 +193,8 @@
 
         function filterItems(type) {
             currentFilter = type;
+            
+            // 更新按鈕樣式
             ['all', 'onsite', 'preorder'].forEach(t => {
                 const btn = document.getElementById(`btn-${t}`);
                 if (t === type) {
@@ -188,30 +203,27 @@
                     btn.className = "px-3 py-1 text-sm font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition";
                 }
             });
-            
-            const savedQty = {};
-            products.forEach(p => {
-                const el = document.getElementById(`qty-${p.id}`);
-                savedQty[p.id] = el ? el.value : 0;
-            });
+
+            // 更新摘要標題標籤
+            const titleEl = document.getElementById('summary-title');
+            if(type === 'all') titleEl.innerText = "📊 預算統計摘要 (全部)";
+            if(type === 'onsite') titleEl.innerText = "📊 預算統計摘要 (現場線上)";
+            if(type === 'preorder') titleEl.innerText = "📊 預算統計摘要 (預購限定)";
             
             renderItems();
-            
-            products.forEach(p => {
-                const el = document.getElementById(`qty-${p.id}`);
-                if (el && savedQty[p.id]) el.value = savedQty[p.id];
-            });
             calculateTotal();
         }
 
         function changeQty(id, diff) {
-            const input = document.getElementById(`qty-${id}`);
-            if (!input) return;
-            let val = parseInt(input.value) || 0;
+            let val = globalQuantities[id] || 0;
             val += diff;
             if (val < 0) val = 0;
             if (val > 99) val = 99;
-            input.value = val;
+            globalQuantities[id] = val;
+            
+            const input = document.getElementById(`qty-${id}`);
+            if (input) input.value = val;
+            
             calculateTotal();
         }
 
@@ -219,8 +231,11 @@
             const input = document.getElementById(`qty-${id}`);
             if (!input) return;
             let val = parseInt(input.value);
-            if (isNaN(val) || val < 0) input.value = 0;
-            if (val > 99) input.value = 99;
+            if (isNaN(val) || val < 0) val = 0;
+            if (val > 99) val = 99;
+            
+            globalQuantities[id] = val;
+            input.value = val;
             calculateTotal();
         }
 
@@ -242,33 +257,42 @@
 
             updateLivePrices();
 
-            let totalKrw = 0;
-            let totalTwd = 0;
-            let preorderTwd = 0;
-            let onsiteTwd = 0;
-            let totalCount = 0;
+            // 1. 這是「當前分類面板」看得到的統計變數
+            let filterKrw = 0;
+            let filterTwd = 0;
+            let filterCount = 0;
+
+            // 2. 這依然保持不分頁面「全域」的總額統計（供最下方兩橫列小字參考）
+            let globalPreorderTwd = 0;
+            let globalOnsiteTwd = 0;
 
             const cartPreview = document.getElementById('cart-preview');
             cartPreview.innerHTML = '';
 
             products.forEach(p => {
-                const qtyEl = document.getElementById(`qty-${p.id}`);
-                const qty = qtyEl ? (parseInt(qtyEl.value) || 0) : 0;
+                const qty = globalQuantities[p.id] || 0;
+                const itemKrw = p.krw * qty;
+                const itemTwd = Math.round(itemKrw * rate * feeMultiplier);
 
-                if (qty > 0) {
-                    const itemKrw = p.krw * qty;
-                    const itemTwd = Math.round(itemKrw * rate * feeMultiplier);
+                // 計算全域底部分流金額
+                if (p.type.includes('PRE-ORDER')) {
+                    globalPreorderTwd += itemTwd;
+                } else {
+                    globalOnsiteTwd += itemTwd;
+                }
 
-                    totalKrw += itemKrw;
-                    totalTwd += itemTwd;
-                    totalCount += qty;
+                // 核心重點：判斷此品項是否符合「當前顯示分類」
+                let isVisible = false;
+                if (currentFilter === 'all') isVisible = true;
+                if (currentFilter === 'onsite' && p.type === '現場/線上同步') isVisible = true;
+                if (currentFilter === 'preorder' && p.type.includes('PRE-ORDER')) isVisible = true;
 
-                    if (p.type.includes('PRE-ORDER')) {
-                        preorderTwd += itemTwd;
-                    } else {
-                        onsiteTwd += itemTwd;
-                    }
+                if (isVisible && qty > 0) {
+                    filterKrw += itemKrw;
+                    filterTwd += itemTwd;
+                    filterCount += qty;
 
+                    // 只把目前看得到、且有數量的品項塞進右側快照
                     const itemPreview = document.createElement('div');
                     itemPreview.className = "flex justify-between items-start py-1.5 border-b border-slate-800/40 text-[11px] gap-2";
                     itemPreview.innerHTML = `
@@ -282,15 +306,18 @@
                 }
             });
 
-            if (totalCount === 0) {
-                cartPreview.innerHTML = '<div class="text-slate-500 italic py-2">尚未選擇任何品項</div>';
+            if (filterCount === 0) {
+                cartPreview.innerHTML = '<div class="text-slate-500 italic py-2">當前分類無勾選品項</div>';
             }
 
-            document.getElementById('total-krw').innerText = `₩${totalKrw.toLocaleString()}`;
-            document.getElementById('total-twd').innerText = `NT$ ${totalTwd.toLocaleString()}`;
-            document.getElementById('total-count').innerText = `${totalCount} 件`;
-            document.getElementById('preorder-twd').innerText = `NT$ ${preorderTwd.toLocaleString()}`;
-            document.getElementById('onsite-twd').innerText = `NT$ ${onsiteTwd.toLocaleString()}`;
+            // 更新畫面上「當前分類標籤」的金額摘要
+            document.getElementById('total-krw').innerText = `₩${filterKrw.toLocaleString()}`;
+            document.getElementById('total-twd').innerText = `NT$ ${filterTwd.toLocaleString()}`;
+            document.getElementById('total-count').innerText = `${filterCount} 件`;
+            
+            // 保持最底下提示字呈現總庫存（亦可一目瞭然全專案進度）
+            document.getElementById('preorder-twd').innerText = `NT$ ${globalPreorderTwd.toLocaleString()}`;
+            document.getElementById('onsite-twd').innerText = `NT$ ${globalOnsiteTwd.toLocaleString()}`;
         }
 
         // 初始化載入
