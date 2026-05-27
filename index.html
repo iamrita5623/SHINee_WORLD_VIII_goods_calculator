@@ -13,9 +13,27 @@
     <div class="max-w-6xl mx-auto p-4 md:p-8">
         <!-- 標頭 -->
         <header class="mb-6 text-center bg-gradient-to-r from-teal-500 to-cyan-600 p-6 rounded-2xl text-white shadow-md">
-            <h1 class="text-2xl md:text-3xl font-bold mb-2">💎 SHINee WORLD VIII 首爾場週邊清單</h1>
-            <p class="text-teal-50 opacity-90">調整各品項購買數量，系統會自動、即時地為您更新採購預算與分類統計。</p>
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">💎 SHINee WORLD VIII 首爾場週邊試算清單</h1>
+            <p class="text-teal-50 opacity-90">調整各品項購買數量，系統會自動、即時地為您更新清單與分類統計。</p>
         </header>
+
+        <!-- 💡 新增：自動跨時區開賣倒數計時面板 -->
+        <div class="bg-gradient-to-r from-slate-800 to-slate-950 text-white p-4 md:p-6 rounded-2xl shadow-md mb-6 border border-slate-700/50">
+            <div class="flex items-center gap-2 mb-3 text-teal-400">
+                <span class="animate-pulse text-lg">⏱️</span>
+                <h3 class="font-bold text-sm md:text-base">週邊線上開賣跨時區倒數</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                    <span class="text-xs text-slate-400 block mb-1">📦 現場領取 (Berriz 賣場) 開賣倒數</span>
+                    <div id="countdown-berriz" class="text-xl md:text-2xl font-black font-mono text-amber-300">計算中...</div>
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                    <span class="text-xs text-slate-400 block mb-1">🚚 一般預購 (八月出貨) 開賣倒數</span>
+                    <div id="countdown-merch" class="text-xl md:text-2xl font-black font-mono text-cyan-300">計算中...</div>
+                </div>
+            </div>
+        </div>
 
         <!-- 官方購買連結區塊 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
@@ -125,7 +143,7 @@
                         
                         <!-- 購物車清單快照 -->
                         <div class="pt-4 border-t border-slate-700/60">
-                            <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">🛒 當前頁面選購快照</h4>
+                            <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">🛒 當前頁面選購明細</h4>
                             <div id="cart-preview" class="max-h-48 overflow-y-auto space-y-2 text-xs text-slate-300 pr-1">
                                 <div class="text-slate-500 italic py-2">當前分類無勾選品項</div>
                             </div>
@@ -152,7 +170,7 @@
           {"id": 1, "nameEn": "CARD WALLET SET", "nameZh": "證件卡夾鑰匙圈組", "type": "現場/線上同步", "krw": 55000, "img": "goods/wallet.jpg"},
           {"id": 2, "nameEn": "ID PHOTO SET", "nameZh": "證件照照片組", "type": "現場/線上同步", "krw": 10000, "img": "goods/id_photo.jpg"},
           {"id": 3, "nameEn": "BADGE", "nameZh": "巡演紀念金屬徽章", "type": "現場/線上同步", "krw": 10000, "img": "goods/badge.jpg"},
-          {"id": 4, "nameEn": "LONG SLEEVE SET", "nameZh": "黑色高質感長袖組", "type": "現場/線上同步", "krw": 65000, "img": "goods/long_sleeve.jpg"},
+          {"id": 4, "nameEn": "LONG SLEEVE SET", "nameZh": "黑色高質感長袖衛衣組", "type": "現場/線上同步", "krw": 65000, "img": "goods/long_sleeve.jpg"},
           {"id": 5, "nameEn": "LENTICULAR IMAGE PICKET", "nameZh": "3D 變幻大扇子", "type": "現場/線上同步", "krw": 10000, "img": "goods/picket.jpg"},
           {"id": 6, "nameEn": "REVERSIBLE TOTE BAG SET", "nameZh": "雙面用兩面托特包組", "type": "現場/線上同步", "krw": 65000, "img": "goods/tote_bag.jpg"},
           {"id": 7, "nameEn": "RANDOM TRADING CARD SET", "nameZh": "隨機明星卡組", "type": "現場/線上同步", "krw": 6000, "img": "goods/trading_card.jpg"},
@@ -369,8 +387,47 @@
             document.getElementById('onsite-twd').innerText = `${symbol}${finalOnsiteSum}`;
         }
 
+        // 🌟 核心功能 3：智慧跨時區倒數計算邏輯
+        function initCountdowns() {
+            // 用標準 UTC 時間來鎖定開賣時間（2026-05-28 15:00 KST 等於 2026-05-28 06:00 UTC）
+            const openTimeUtc = Date.UTC(2026, 4, 28, 6, 0, 0); // 注意：JavaScript 的月份從 0 開始，4 代表 5 月
+
+            function updateTimer() {
+                const now = new Date().getTime();
+                const diff = openTimeUtc - now;
+
+                const berrizEl = document.getElementById('countdown-berriz');
+                const merchEl = document.getElementById('countdown-merch');
+
+                if (diff <= 0) {
+                    // 已過開賣時間
+                    berrizEl.innerText = "● 線上開賣中 / 現場取貨開始";
+                    berrizEl.className = "text-xl md:text-2xl font-black text-emerald-400";
+                    
+                    merchEl.innerText = "● 線上預購開賣中";
+                    merchEl.className = "text-xl md:text-2xl font-black text-emerald-400";
+                } else {
+                    // 計算天、時、分、秒
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    const countdownStr = `${days} 天 ${hours} 小時 ${minutes} 分 ${seconds} 秒`;
+                    
+                    berrizEl.innerText = countdownStr;
+                    merchEl.innerText = countdownStr;
+                }
+            }
+
+            // 每秒鐘倒數更新一次
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
         // 初始化設定
         handleCurrencyChange();
+        initCountdowns();
     </script>
 </body>
 </html>
