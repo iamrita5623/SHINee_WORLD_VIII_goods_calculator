@@ -13,7 +13,7 @@
     <div class="max-w-6xl mx-auto p-4 md:p-8">
         <!-- 標頭 -->
         <header class="mb-6 text-center bg-gradient-to-r from-teal-500 to-cyan-600 p-6 rounded-2xl text-white shadow-md">
-            <h1 class="text-2xl md:text-3xl font-bold mb-2">💎 SHINee WORLD VIII 首爾場週邊採買試算</h1>
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">💎 SHINee WORLD VIII 首爾場週邊清單</h1>
             <p class="text-teal-50 opacity-90">調整各品項購買數量，系統會自動、即時地為您更新採購預算與分類統計。</p>
         </header>
 
@@ -65,7 +65,7 @@
 
             <!-- 右側：控制面板與統計結果 -->
             <div class="space-y-6">
-                <!-- 參數與新功能設定面板 -->
+                <!-- 參數與功能設定面板 -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                     <h3 class="text-lg font-bold text-slate-700 mb-4">⚙️ 匯率與幣別設定</h3>
                     <div class="space-y-4">
@@ -125,7 +125,7 @@
                         
                         <!-- 購物車清單快照 -->
                         <div class="pt-4 border-t border-slate-700/60">
-                            <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">🛒 當前頁面選購明細</h4>
+                            <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">🛒 當前頁面選購快照</h4>
                             <div id="cart-preview" class="max-h-48 overflow-y-auto space-y-2 text-xs text-slate-300 pr-1">
                                 <div class="text-slate-500 italic py-2">當前分類無勾選品項</div>
                             </div>
@@ -138,7 +138,7 @@
         <!-- 頁面下方週邊大圖呈現區塊 -->
         <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100">
             <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                <span>📸</span> 官方週邊圖
+                <span>📸</span> 官方週邊全覽大圖
             </h3>
             <div class="bg-slate-50 p-2 rounded-xl flex justify-center items-center overflow-hidden">
                 <img src="weverse_2.jpg" alt="SHINee WORLD VIII 週邊示意圖" class="w-full h-auto rounded-lg shadow-sm max-w-4xl object-contain">
@@ -155,7 +155,7 @@
           {"id": 4, "nameEn": "LONG SLEEVE SET", "nameZh": "黑色高質感長袖組", "type": "現場/線上同步", "krw": 65000, "img": "goods/long_sleeve.jpg"},
           {"id": 5, "nameEn": "LENTICULAR IMAGE PICKET", "nameZh": "3D 變幻大扇子", "type": "現場/線上同步", "krw": 10000, "img": "goods/picket.jpg"},
           {"id": 6, "nameEn": "REVERSIBLE TOTE BAG SET", "nameZh": "雙面用兩面托特包組", "type": "現場/線上同步", "krw": 65000, "img": "goods/tote_bag.jpg"},
-          {"id": 7, "nameEn": "RANDOM TRADING CARD SET", "nameZh": "隨機卡包", "type": "現場/線上同步", "krw": 6000, "img": "goods/trading_card.jpg"},
+          {"id": 7, "nameEn": "RANDOM TRADING CARD SET", "nameZh": "隨機明星卡組", "type": "現場/線上同步", "krw": 6000, "img": "goods/trading_card.jpg"},
           {"id": 8, "nameEn": "NECKLACE SET", "nameZh": "巡演限定設計項鍊組", "type": "預購限定", "krw": 47000, "img": "goods/necklace.jpg"},
           {"id": 9, "nameEn": "OFFICIAL FANLIGHT", "nameZh": "官方手燈", "type": "現場/線上同步", "krw": 42000, "img": "goods/fanlight.jpg"},
           {"id": 10, "nameEn": "MINI FANLIGHT KEYRING", "nameZh": "迷你手燈鑰匙圈", "type": "現場/線上同步", "krw": 19000, "img": "goods/keyring.jpg"},
@@ -166,7 +166,7 @@
           {"id": 15, "nameEn": "DIGITAL CLOCK", "nameZh": "角色數位時鐘", "type": "預購限定", "krw": 19000, "img": "goods/clock.jpg"},
           {"id": 16, "nameEn": "RANDOM SQUISHY KEY RING", "nameZh": "隨機舒壓軟軟鑰匙圈", "type": "現場/線上同步", "krw": 10000, "img": "goods/squishy.jpg"},
           {"id": 17, "nameEn": "HANDMADE FELT DOLL", "nameZh": "手作感毛氈布偶吊飾", "type": "預購限定", "krw": 22000, "img": "goods/felt_doll.jpg"},
-          {"id": 18, "nameEn": "PEEK-UP FIGURE", "nameZh": "趴姿杯緣子", "type": "現場/線上同步", "krw": 15000, "img": "goods/figure.jpg"}
+          {"id": 18, "nameEn": "PEEK-UP FIGURE", "nameZh": "趴姿公仔玩具", "type": "現場/線上同步", "krw": 15000, "img": "goods/figure.jpg"}
         ];
         
         const globalQuantities = {};
@@ -174,11 +174,9 @@
 
         let currentFilter = 'all';
         
-        // 🛠️ 設定安心的固定基準匯率（台幣預設為 Excel 的 0.0240）
         const staticRates = { "TWD": 0.0240, "JPY": 0.1120, "HKD": 0.0056 };
         const currencySymbols = { "TWD": "NT$ ", "JPY": "¥ ", "HKD": "HK$ " };
 
-        // 切換幣別時，自動套用該幣別固定的基準值
         function handleCurrencyChange() {
             const currentCurrency = document.getElementById('currency-select').value;
             const defaultRate = staticRates[currentCurrency];
@@ -198,9 +196,9 @@
 
             products.forEach(p => {
                 if (currentFilter === 'onsite' && p.type !== '現場/線上同步') return;
-                if (currentFilter === 'preorder' && !p.type.includes('PRE-ORDER')) return;
+                if (currentFilter === 'preorder' && p.type !== '預購限定') return;
 
-                const isPreOrder = p.type.includes('PRE-ORDER');
+                const isPreOrder = (p.type === '預購限定');
                 const badgeColor = isPreOrder ? 'bg-amber-100 text-amber-800 border-amber-200' : 'bg-cyan-100 text-cyan-800 border-cyan-200';
                 const currentQty = globalQuantities[p.id];
 
@@ -323,7 +321,7 @@
                 const itemKrw = p.krw * qty;
                 const itemTwd = itemKrw * rate * feeMultiplier;
 
-                if (p.type.includes('PRE-ORDER')) {
+                if (p.type === '預購限定') {
                     globalPreorderTwd += itemTwd;
                 } else {
                     globalOnsiteTwd += itemTwd;
@@ -332,7 +330,7 @@
                 let isVisible = false;
                 if (currentFilter === 'all') isVisible = true;
                 if (currentFilter === 'onsite' && p.type === '現場/線上同步') isVisible = true;
-                if (currentFilter === 'preorder' && p.type.includes('PRE-ORDER')) isVisible = true;
+                if (currentFilter === 'preorder' && p.type === '預購限定') isVisible = true;
 
                 if (isVisible && qty > 0) {
                     filterKrw += itemKrw;
