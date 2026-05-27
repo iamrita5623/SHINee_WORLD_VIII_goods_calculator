@@ -11,13 +11,11 @@
 </head>
 <body class="bg-slate-50 text-slate-800">
     <div class="max-w-6xl mx-auto p-4 md:p-8">
-        <!-- 標頭 -->
         <header class="mb-6 text-center bg-gradient-to-r from-teal-500 to-cyan-600 p-6 rounded-2xl text-white shadow-md">
             <h1 class="text-2xl md:text-3xl font-bold mb-2">💎 SHINee WORLD VIII 首爾場週邊採買試算</h1>
-            <p class="text-teal-50 opacity-90">調整各品項購買數量，系統會自動、即時地為您更新採購清單與分類統計。</p>
+            <p class="text-teal-50 opacity-90">調整各品項購買數量，系統會自動、即時地為您更新採購預算與分類統計。</p>
         </header>
 
-        <!-- 官方購買連結區塊 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div class="bg-gradient-to-br from-teal-50 to-emerald-50 border border-teal-100 p-4 rounded-xl shadow-sm">
                 <div class="flex items-start gap-3">
@@ -45,9 +43,7 @@
             </div>
         </div>
 
-        <!-- 主區塊：清單與計算面板 -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-            <!-- 左側與中間：品項清單 -->
             <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                 <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
                     <h2 class="text-xl font-bold text-slate-700">🛍️ 週邊品項清單</h2>
@@ -59,20 +55,30 @@
                 </div>
 
                 <div id="items-container" class="space-y-4">
-                    <!-- 動態載入品項 -->
-                </div>
+                    </div>
             </div>
 
-            <!-- 右側：控制面板與統計結果 -->
             <div class="space-y-6">
-                <!-- 參數設定 -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h3 class="text-lg font-bold text-slate-700 mb-4">⚙️ 匯率與參數設定</h3>
+                    <h3 class="text-lg font-bold text-slate-700 mb-4">⚙️ 匯率與幣別設定</h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-500 mb-1">自訂韓元匯率</label>
-                            <input type="number" id="exchange-rate" value="0.024" step="0.0001" oninput="calculateTotal()" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+                            <label class="block text-sm font-medium text-slate-500 mb-1">選擇結算幣別</label>
+                            <select id="currency-select" onchange="handleCurrencyChange()" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white font-medium">
+                                <option value="TWD">新台幣 (NT$)</option>
+                                <option value="JPY">日圓 (¥)</option>
+                                <option value="HKD">港幣 (HK$)</option>
+                            </select>
                         </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-sm font-medium text-slate-500">自訂韓元匯率</label>
+                                <span id="api-status" class="text-[11px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded font-medium">正在取得即時匯率...</span>
+                            </div>
+                            <input type="number" id="exchange-rate" value="0.0240" step="0.0001" oninput="calculateTotal()" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 font-mono">
+                        </div>
+                        
                         <div class="flex items-center">
                             <input type="checkbox" id="oversea-fee" onchange="calculateTotal()" class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-slate-300 rounded">
                             <label for="oversea-fee" class="ml-2 block text-sm text-slate-600">包含海外刷卡手續費 1.5%</label>
@@ -80,12 +86,11 @@
                     </div>
                 </div>
 
-                <!-- 預算統計摘要 -->
                 <div class="bg-gradient-to-b from-slate-800 to-slate-900 p-6 rounded-2xl text-white shadow-md sticky top-4">
                     <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-teal-400" id="summary-title">📊 預算統計摘要 (全部)</h3>
                     <div class="space-y-4">
                         <div class="bg-slate-700/40 p-4 rounded-xl">
-                            <div class="text-xs text-slate-400 mb-1" id="total-twd-label">當前分類總計應付台幣</div>
+                            <div class="text-xs text-slate-400 mb-1" id="total-twd-label">當前分類總計應付預算</div>
                             <div class="text-3xl font-extrabold text-teal-300" id="total-twd">NT$ 0</div>
                         </div>
                         <div class="grid grid-cols-2 gap-2 text-sm">
@@ -100,16 +105,15 @@
                         </div>
                         <div class="pt-4 border-t border-slate-700/60 space-y-2 text-xs text-slate-300">
                             <div class="flex justify-between">
-                                <span>① 線上預購限定金額 (不分頁面):</span>
+                                <span class="summary-sub-label">① 線上預購限定金額 (總計):</span>
                                 <span class="font-semibold text-amber-400" id="preorder-twd">NT$ 0</span>
                             </div>
                             <div class="flex justify-between">
-                                <span>② 現場/線上同步金額 (不分頁面):</span>
+                                <span class="summary-sub-label">② 現場/線上同步金額 (總計):</span>
                                 <span class="font-semibold text-cyan-400" id="onsite-twd">NT$ 0</span>
                             </div>
                         </div>
                         
-                        <!-- 購物車清單快照 -->
                         <div class="pt-4 border-t border-slate-700/60">
                             <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">🛒 當前頁面選購清單</h4>
                             <div id="cart-preview" class="max-h-48 overflow-y-auto space-y-2 text-xs text-slate-300 pr-1">
@@ -121,10 +125,9 @@
             </div>
         </div>
 
-        <!-- 頁面下方週邊大圖呈現區塊 (保留原本的大圖備用) -->
         <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100">
             <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                <span>📸</span> 官方週邊圖
+                <span>📸</span> 官方週邊大圖
             </h3>
             <div class="bg-slate-50 p-2 rounded-xl flex justify-center items-center overflow-hidden">
                 <img src="weverse_2.jpg" alt="SHINee WORLD VIII 週邊示意圖" class="w-full h-auto rounded-lg shadow-sm max-w-4xl object-contain">
@@ -133,17 +136,15 @@
     </div>
 
     <script>
-        // 🛠️ 在此處為各品項加上對應的 "img" 檔名
-        // 如果還沒有該品項的圖，可以先留空 ""，系統會自動用預設圖示替代
         const products = [
           {"id": 0, "nameEn": "INVERT POSTCARD SET", "nameZh": "巡演明信片組", "type": "現場/線上同步", "krw": 12000, "img": "goods/postcard.jpg"},
           {"id": 1, "nameEn": "CARD WALLET SET", "nameZh": "證件卡夾鑰匙圈組", "type": "現場/線上同步", "krw": 55000, "img": "goods/wallet.jpg"},
           {"id": 2, "nameEn": "ID PHOTO SET", "nameZh": "證件照照片組", "type": "現場/線上同步", "krw": 10000, "img": "goods/id_photo.jpg"},
           {"id": 3, "nameEn": "BADGE", "nameZh": "巡演紀念金屬徽章", "type": "現場/線上同步", "krw": 10000, "img": "goods/badge.jpg"},
-          {"id": 4, "nameEn": "LONG SLEEVE SET", "nameZh": "黑色高質感長袖組", "type": "現場/線上同步", "krw": 65000, "img": "goods/long_sleeve.jpg"},
+          {"id": 4, "nameEn": "LONG SLEEVE SET", "nameZh": "黑色高質感長袖衛衣組", "type": "現場/線上同步", "krw": 65000, "img": "goods/long_sleeve.jpg"},
           {"id": 5, "nameEn": "LENTICULAR IMAGE PICKET", "nameZh": "3D 變幻大扇子", "type": "現場/線上同步", "krw": 10000, "img": "goods/picket.jpg"},
           {"id": 6, "nameEn": "REVERSIBLE TOTE BAG SET", "nameZh": "雙面用兩面托特包組", "type": "現場/線上同步", "krw": 65000, "img": "goods/tote_bag.jpg"},
-          {"id": 7, "nameEn": "RANDOM TRADING CARD SET", "nameZh": "隨機卡包", "type": "現場/線上同步", "krw": 6000, "img": "goods/trading_card.jpg"},
+          {"id": 7, "nameEn": "RANDOM TRADING CARD SET", "nameZh": "隨機明星卡組", "type": "現場/線上同步", "krw": 6000, "img": "goods/trading_card.jpg"},
           {"id": 8, "nameEn": "NECKLACE SET", "nameZh": "巡演限定設計項鍊組", "type": "PRE-ORDER ONLY (預購限定)", "krw": 47000, "img": "goods/necklace.jpg"},
           {"id": 9, "nameEn": "OFFICIAL FANLIGHT", "nameZh": "官方手燈", "type": "現場/線上同步", "krw": 42000, "img": "goods/fanlight.jpg"},
           {"id": 10, "nameEn": "MINI FANLIGHT KEYRING", "nameZh": "迷你手燈鑰匙圈", "type": "現場/線上同步", "krw": 19000, "img": "goods/keyring.jpg"},
@@ -154,17 +155,63 @@
           {"id": 15, "nameEn": "DIGITAL CLOCK", "nameZh": "角色數位時鐘", "type": "PRE-ORDER ONLY (預購限定)", "krw": 19000, "img": "goods/clock.jpg"},
           {"id": 16, "nameEn": "RANDOM SQUISHY KEY RING", "nameZh": "隨機舒壓軟軟鑰匙圈", "type": "現場/線上同步", "krw": 10000, "img": "goods/squishy.jpg"},
           {"id": 17, "nameEn": "HANDMADE FELT DOLL", "nameZh": "手作感毛氈布偶吊飾", "type": "PRE-ORDER ONLY (預購限定)", "krw": 22000, "img": "goods/felt_doll.jpg"},
-          {"id": 18, "nameEn": "PEEK-UP FIGURE", "nameZh": "趴姿杯緣子", "type": "現場/線上同步", "krw": 15000, "img": "goods/figure.jpg"}
+          {"id": 18, "nameEn": "PEEK-UP FIGURE", "nameZh": "趴姿公仔玩具", "type": "現場/線上同步", "krw": 15000, "img": "images/figure.jpg"}
         ];
         
         const globalQuantities = {};
         products.forEach(p => globalQuantities[p.id] = 0);
 
         let currentFilter = 'all';
+        
+        // 儲存各個幣別對應韓元(KRW)的基準即時匯率物件
+        let liveRatesFetched = { "TWD": 0.0240, "JPY": 0.112, "HKD": 0.0056 };
+        
+        // 各種目標幣別的前綴字
+        const currencySymbols = { "TWD": "NT$ ", "JPY": "¥ ", "HKD": "HK$ " };
+
+        // 🌟 核心功能 1：自動非同步抓取即時匯率 API (以韓元 KRW 為基準換算)
+        async function fetchLiveRates() {
+            try {
+                const response = await fetch("https://open.er-api.com/v6/latest/KRW");
+                if (!response.ok) throw new Error("API 反應異常");
+                const data = await response.json();
+                
+                if (data && data.rates) {
+                    // 取得即時 KRW 轉換各國貨幣之精準值
+                    liveRatesFetched["TWD"] = data.rates["TWD"] || 0.0240;
+                    liveRatesFetched["JPY"] = data.rates["JPY"] || 0.1120;
+                    liveRatesFetched["HKD"] = data.rates["HKD"] || 0.0056;
+                    
+                    document.getElementById('api-status').innerText = "● 已同步最新即時匯率";
+                    document.getElementById('api-status').className = "text-[11px] text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded font-medium";
+                }
+            } catch (error) {
+                console.error("匯率抓取失敗，採用靜態預設值:", error);
+                document.getElementById('api-status').innerText = "⚠️ 匯率 API 連線失敗，採用預設值";
+            }
+            // 讀取完畢後，初始化設定輸入框的數值
+            handleCurrencyChange();
+        }
+
+        // 🌟 核心功能 2：當使用者切換幣別時的處理
+        function handleCurrencyChange() {
+            const currentCurrency = document.getElementById('currency-select').value;
+            const targetRate = liveRatesFetched[currentCurrency];
+            
+            // 點選切換後，自動把輸入框的數值更換成當前幣別的匯率（保留四位小數）
+            document.getElementById('exchange-rate').value = targetRate.toFixed(4);
+            
+            // 重新刷新介面文字
+            renderItems();
+            calculateTotal();
+        }
 
         function renderItems() {
             const container = document.getElementById('items-container');
             container.innerHTML = '';
+            
+            const currentCurrency = document.getElementById('currency-select').value;
+            const symbol = currencySymbols[currentCurrency];
 
             products.forEach(p => {
                 if (currentFilter === 'onsite' && p.type !== '現場/線上同步') return;
@@ -174,16 +221,14 @@
                 const badgeColor = isPreOrder ? 'bg-amber-100 text-amber-800 border-amber-200' : 'bg-cyan-100 text-cyan-800 border-cyan-200';
                 const currentQty = globalQuantities[p.id];
 
-                // 圖片安全機制：如果沒有設定圖片，就顯示一個閃亮的鑽石佔位符
                 const imgHtml = p.img 
-                    ? `<img src="${p.img}" alt="${p.nameZh}" class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg bg-slate-100 border border-slate-200 shrink-0 shadow-sm">`
+                    ? `<img src="${p.img}" alt="${p.nameZh}" onerror="this.src='';this.parentNode.innerHTML='💎';this.className='w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center text-xl shrink-0 border border-dashed border-slate-300'" class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg bg-slate-100 border border-slate-200 shrink-0 shadow-sm">`
                     : `<div class="w-16 h-16 md:w-20 md:h-20 bg-slate-100 rounded-lg flex items-center justify-center text-xl shrink-0 border border-dashed border-slate-300">💎</div>`;
 
                 const row = document.createElement('div');
                 row.className = "flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-teal-200 hover:bg-teal-50/20 transition gap-4";
                 row.innerHTML = `
                     <div class="flex items-center gap-4 flex-1">
-                        <!-- 嵌入商品個別小圖 -->
                         ${imgHtml}
                         <div>
                             <div class="font-bold text-slate-800 text-base">${p.nameEn}</div>
@@ -196,7 +241,7 @@
                     </div>
                     <div class="flex items-center justify-between sm:justify-end gap-6">
                         <div class="text-right sm:min-w-[120px]">
-                            <div class="font-bold text-slate-700" id="live-twd-${p.id}">NT$ 0</div>
+                            <div class="font-bold text-slate-700" id="live-twd-${p.id}">${symbol}0</div>
                             <div class="text-xs text-slate-400">估計單價</div>
                         </div>
                         <div class="flex items-center border border-slate-200 rounded-lg bg-white shadow-sm">
@@ -259,11 +304,16 @@
 
         function updateLivePrices() {
             const rate = parseFloat(document.getElementById('exchange-rate').value) || 0.024;
+            const currentCurrency = document.getElementById('currency-select').value;
+            const symbol = currencySymbols[currentCurrency];
+            
             products.forEach(p => {
                 const el = document.getElementById(`live-twd-${p.id}`);
                 if (el) {
-                    const liveTwd = Math.round(p.krw * rate);
-                    el.innerText = `NT$ ${liveTwd.toLocaleString()}`;
+                    // 日圓或港幣保留一位小數以便更精確，台幣整數四捨五入
+                    const liveConverted = p.krw * rate;
+                    const formatted = currentCurrency === 'TWD' ? Math.round(liveConverted).toLocaleString() : liveConverted.toFixed(1);
+                    el.innerText = `${symbol}${formatted}`;
                 }
             });
         }
@@ -272,6 +322,8 @@
             const rate = parseFloat(document.getElementById('exchange-rate').value) || 0.024;
             const useFee = document.getElementById('oversea-fee').checked;
             const feeMultiplier = useFee ? 1.015 : 1.0;
+            const currentCurrency = document.getElementById('currency-select').value;
+            const symbol = currencySymbols[currentCurrency];
 
             updateLivePrices();
 
@@ -287,7 +339,7 @@
             products.forEach(p => {
                 const qty = globalQuantities[p.id] || 0;
                 const itemKrw = p.krw * qty;
-                const itemTwd = Math.round(itemKrw * rate * feeMultiplier);
+                const itemTwd = itemKrw * rate * feeMultiplier;
 
                 if (p.type.includes('PRE-ORDER')) {
                     globalPreorderTwd += itemTwd;
@@ -305,6 +357,8 @@
                     filterTwd += itemTwd;
                     filterCount += qty;
 
+                    const displayPrice = currentCurrency === 'TWD' ? Math.round(itemTwd).toLocaleString() : itemTwd.toFixed(1);
+
                     const itemPreview = document.createElement('div');
                     itemPreview.className = "flex justify-between items-start py-1.5 border-b border-slate-800/40 text-[11px] gap-2";
                     itemPreview.innerHTML = `
@@ -312,7 +366,7 @@
                             <span class="font-semibold text-slate-200 block">${p.nameEn}</span>
                             <span class="text-slate-400 block text-[10px]">${p.nameZh}</span>
                         </div>
-                        <span class="font-medium text-teal-400 shrink-0">x${qty}<br><span class="text-slate-400 text-[10px]">NT$ ${itemTwd.toLocaleString()}</span></span>
+                        <span class="font-medium text-teal-400 shrink-0 text-right">x${qty}<br><span class="text-slate-400 text-[10px]">${symbol}${displayPrice}</span></span>
                     `;
                     cartPreview.appendChild(itemPreview);
                 }
@@ -322,16 +376,23 @@
                 cartPreview.innerHTML = '<div class="text-slate-500 italic py-2">當前分類無勾選品項</div>';
             }
 
+            // 格式化大總計顯示
+            const finalFilterSum = currentCurrency === 'TWD' ? Math.round(filterTwd).toLocaleString() : filterTwd.toFixed(1);
+            const finalPreOrderSum = currentCurrency === 'TWD' ? Math.round(globalPreorderTwd).toLocaleString() : globalPreorderTwd.toFixed(1);
+            const finalOnsiteSum = currentCurrency === 'TWD' ? Math.round(globalOnsiteTwd).toLocaleString() : globalOnsiteTwd.toFixed(1);
+
+            // 更新畫面的標籤與金額文字
+            document.getElementById('total-twd-label').innerText = `當前分類總計應付 (${currentCurrency})`;
+            document.getElementById('total-twd').innerText = `${symbol}${finalFilterSum}`;
             document.getElementById('total-krw').innerText = `₩${filterKrw.toLocaleString()}`;
-            document.getElementById('total-twd').innerText = `NT$ ${filterTwd.toLocaleString()}`;
             document.getElementById('total-count').innerText = `${filterCount} 件`;
-            document.getElementById('preorder-twd').innerText = `NT$ ${globalPreorderTwd.toLocaleString()}`;
-            document.getElementById('onsite-twd').innerText = `NT$ ${globalOnsiteTwd.toLocaleString()}`;
+            
+            document.getElementById('preorder-twd').innerText = `${symbol}${finalPreOrderSum}`;
+            document.getElementById('onsite-twd').innerText = `${symbol}${finalOnsiteSum}`;
         }
 
-        // 初始化載入
-        renderItems();
-        calculateTotal();
+        // 啟動時立刻執行即時匯率抓取
+        fetchLiveRates();
     </script>
 </body>
 </html>
