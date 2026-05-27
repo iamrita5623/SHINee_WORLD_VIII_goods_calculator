@@ -17,22 +17,20 @@
             <p class="text-teal-50 opacity-90">調整各品項購買數量，系統會自動、即時地為您更新清單與分類統計。</p>
         </header>
 
-        <!-- 💡 新增：自動跨時區開賣倒數計時面板 -->
-        <div class="bg-gradient-to-r from-slate-800 to-slate-950 text-white p-4 md:p-6 rounded-2xl shadow-md mb-6 border border-slate-700/50">
-            <div class="flex items-center gap-2 mb-3 text-teal-400">
-                <span class="animate-pulse text-lg">⏱️</span>
-                <h3 class="font-bold text-sm md:text-base">週邊線上開賣跨時區倒數</h3>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800">
-                    <span class="text-xs text-slate-400 block mb-1">📦 現場領取 (Berriz 賣場) 開賣倒數</span>
-                    <div id="countdown-berriz" class="text-xl md:text-2xl font-black font-mono text-amber-300">計算中...</div>
-                </div>
-                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800">
-                    <span class="text-xs text-slate-400 block mb-1">🚚 一般預購 (八月出貨) 開賣倒數</span>
-                    <div id="countdown-merch" class="text-xl md:text-2xl font-black font-mono text-cyan-300">計算中...</div>
+        <!-- 新增：跨時區開賣倒數計時器 -->
+        <div class="mb-6 bg-slate-900 text-white p-4 rounded-2xl shadow-sm border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl animate-pulse">⏰</span>
+                <div>
+                    <h3 class="font-bold text-teal-400 text-sm md:text-base">📢 官方週邊線上同步開賣倒數</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">統一開賣時間：2026/05/28 15:00 (KST) / 14:00 (台灣時間)</p>
                 </div>
             </div>
+            <!-- 倒數數字區塊 -->
+            <div id="countdown-display" class="font-mono text-xl md:text-2xl font-black text-amber-400 bg-slate-800 px-4 py-2 rounded-xl border border-slate-700 min-w-[260px] text-center">
+                計算中...
+            </div>
+        </div>
         </div>
 
         <!-- 官方購買連結區塊 -->
