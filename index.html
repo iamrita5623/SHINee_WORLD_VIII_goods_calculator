@@ -3,402 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHINee WORLD VIII 週邊試算清單</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>SHINee SW8 [THE INVERT] 2nd MD 預算試算表</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        :root {
+            --mint-primary: #a3e2c9;
+            --mint-light: #e8f8f2;
+            --mint-dark: #76c7a6;
+            --charcoal-dark: #2c302e;
+            --charcoal-light: #4a4e4b;
+            --text-color: #333333;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f4f7f5;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 3px solid var(--mint-primary);
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+
+        header h1 {
+            color: var(--charcoal-dark);
+            font-size: 24px;
+            margin: 0 0 8px 0;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            color: var(--charcoal-light);
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .exchange-rate-box {
+            background-color: var(--mint-light);
+            border: 1px solid var(--mint-primary);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .exchange-rate-box label {
+            font-weight: bold;
+            color: var(--charcoal-dark);
+        }
+
+        .exchange-rate-box input {
+            padding: 6px 10px;
+            border: 1px solid var(--mint-dark);
+            border-radius: 4px;
+            width: 80px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--charcoal-dark);
+            color: var(--white);
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        th:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+        th:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #eeeeee;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: var(--charcoal-dark);
+        }
+
+        .item-spec {
+            font-size: 12px;
+            color: #777;
+            margin-top: 4px;
+        }
+
+        .quantity-input {
+            width: 60px;
+            padding: 6px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .quantity-input:focus {
+            outline: none;
+            border-color: var(--mint-dark);
+            box-shadow: 0 0 0 2px var(--mint-light);
+        }
+
+        .summary-card {
+            background-color: var(--charcoal-dark);
+            color: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-item .label {
+            font-size: 13px;
+            color: var(--mint-primary);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-item .value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .summary-item .sub-value {
+            font-size: 12px;
+            color: #b0b5b2;
+            margin-top: 4px;
+        }
+
+        .bonus-badge {
+            background-color: #ff7675;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .container { padding: 16px; }
+            th, td { padding: 10px 6px; font-size: 13px; }
+            .summary-card { grid-template-columns: 1fr; gap: 16px; }
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
-    <div class="max-w-6xl mx-auto p-4 md:p-8">
-        <header class="mb-6 text-center bg-gradient-to-r from-teal-500 to-cyan-600 p-6 rounded-2xl text-white shadow-md">
-            <h1 class="text-2xl md:text-3xl font-bold mb-2">💎 SHINee WORLD VIII 首爾場週邊試算清單</h1>
-            <p class="text-teal-50 opacity-90">調整各品項購買數量，系統會自動、即時地為您更新清單與分類統計。</p>
-        </header>
+<body>
 
-        <div class="mb-6 bg-slate-100 text-slate-700 py-2.5 px-4 rounded-xl text-center border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3">
-            <div class="text-xs font-bold text-slate-500 tracking-wide">⏳ 雙通路同步開賣倒數</div>
-            <div id="countdown-display" class="text-sm md:text-base font-extrabold font-mono text-teal-600 tracking-wider">
-                計算中...
-            </div>
+<div class="container">
+    <header>
+        <h1>SHINee WORLD VIII [THE INVERT] 2nd MD 試算表</h1>
+        <p>夢幻薄荷綠夏日遠征 ‧ 專屬預算與滿額特典計算工具</p>
+    </header>
+
+    <div class="exchange-rate-box">
+        <div>
+            <strong>💡 特典提醒：</strong> 線上單筆滿 70,000 ₩ 即可累贈 1 張特別版自拍小卡（可完全累贈）
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <div class="bg-gradient-to-br from-teal-50 to-emerald-50 border border-teal-100 p-4 rounded-xl shadow-sm flex flex-col justify-between">
-                <div class="flex items-start gap-3">
-                    <span class="text-2xl">📦</span>
-                    <div>
-                        <h4 class="font-bold text-teal-900 text-sm md:text-base">▶ 線上訂會場取 (Berriz)</h4>
-                        <p class="text-xs text-teal-700 mt-0.5">時間：2026. 05. 28 (THU) 15:00 ~ 05. 31 (SUN) 14:30 [KST]</p>
-                    </div>
-                </div>
-                <div class="mt-3 text-right">
-                    <a href="https://shop.berriz.in/collection/5ithiq9hwq" target="_blank" class="inline-flex items-center text-xs font-semibold text-teal-600 hover:text-teal-800 underline break-all bg-white px-2.5 py-1 rounded-md shadow-sm border border-teal-100 transition hover:scale-105">
-                        前往 Berriz 購買賣場 ↗
-                    </a>
-                </div>
-            </div>
-            
-            <div class="bg-gradient-to-br from-cyan-50 to-blue-50 border border-cyan-100 p-4 rounded-xl shadow-sm flex flex-col justify-between">
-                <div class="flex items-start gap-3">
-                    <span class="text-2xl">🚚</span>
-                    <div>
-                        <h4 class="font-bold text-cyan-900 text-sm md:text-base">▶ 線上訂八月出貨 (一般預購)</h4>
-                        <p class="text-xs text-cyan-700 mt-0.5">時間：2026. 05. 28 (THU) 15:00 ~ 06. 07 (SUN) 23:59 [KST]</p>
-                    </div>
-                </div>
-                <div class="mt-3 text-right">
-                    <a href="http://linktr.ee/SHINee_merch" target="_blank" class="inline-flex items-center text-xs font-semibold text-cyan-600 hover:text-cyan-800 underline break-all bg-white px-2.5 py-1 rounded-md shadow-sm border border-cyan-100 transition hover:scale-105">
-                        前往 官方 Linktree 連結 ↗
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-            <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
-                    <h2 class="text-xl font-bold text-slate-700">🛍️ 週邊品項清單</h2>
-                    <div class="flex gap-2">
-                        <button onclick="filterItems('all')" id="btn-all" class="px-3 py-1 text-sm font-medium rounded-full bg-teal-500 text-white shadow-sm transition">全部</button>
-                        <button onclick="filterItems('onsite')" id="btn-onsite" class="px-3 py-1 text-sm font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition">現場/線上同步</button>
-                        <button onclick="filterItems('preorder')" id="btn-preorder" class="px-3 py-1 text-sm font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition">預購限定</button>
-                    </div>
-                </div>
-
-                <div id="items-container" class="space-y-4">
-                    </div>
-            </div>
-
-            <div class="space-y-6">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h3 class="text-lg font-bold text-slate-700 mb-4">⚙️ 匯率與幣別設定</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-500 mb-1">選擇結算幣別</label>
-                            <select id="currency-select" onchange="handleCurrencyChange()" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white font-medium">
-                                <option value="TWD">新台幣 (NT$)</option>
-                                <option value="JPY">日圓 (¥)</option>
-                                <option value="HKD">港幣 (HK$)</option>
-                            </select>
-                        </div>
-                        
-                        <div>
-                            <div class="flex justify-between items-center mb-1">
-                                <label class="block text-sm font-medium text-slate-500">手動設定韓元匯率</label>
-                                <span id="api-status" class="text-[11px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded font-medium">固定匯率模式</span>
-                            </div>
-                            <input type="number" id="exchange-rate" value="0.0240" step="0.0001" oninput="calculateTotal()" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 font-mono">
-                        </div>
-                        
-                        <div class="flex items-center">
-                            <input type="checkbox" id="oversea-fee" onchange="calculateTotal()" class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-slate-300 rounded">
-                            <label for="oversea-fee" class="ml-2 block text-sm text-slate-600">包含海外刷卡手續費 1.5%</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-gradient-to-b from-slate-800 to-slate-900 p-6 rounded-2xl text-white shadow-md sticky top-4">
-                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-teal-400" id="summary-title">📊 預算統計摘要 (全部)</h3>
-                    <div class="space-y-4">
-                        <div class="bg-slate-700/40 p-4 rounded-xl">
-                            <div class="text-xs text-slate-400 mb-1" id="total-twd-label">當前分類總計應付預算</div>
-                            <div class="text-3xl font-extrabold text-teal-300" id="total-twd">NT$ 0</div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 text-sm">
-                            <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
-                                <span class="block text-xs text-slate-400">當前分類韓元</span>
-                                <span class="font-bold text-slate-200" id="total-krw">₩0</span>
-                            </div>
-                            <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
-                                <span class="block text-xs text-slate-400">當前已選件數</span>
-                                <span class="font-bold text-slate-200" id="total-count">0 件</span>
-                            </div>
-                        </div>
-                        <div class="pt-4 border-t border-slate-700/60 space-y-2 text-xs text-slate-300">
-                            <div class="flex justify-between">
-                                <span class="summary-sub-label">① 線上預購限定金額 (總計):</span>
-                                <span class="font-semibold text-amber-400" id="preorder-twd">NT$ 0</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="summary-sub-label">② 現場/線上同步金額 (總計):</span>
-                                <span class="font-semibold text-cyan-400" id="onsite-twd">NT$ 0</span>
-                            </div>
-                        </div>
-                        
-                        <div class="pt-4 border-t border-slate-700/60">
-                            <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">🛒 當前頁面選購明細</h4>
-                            <div id="cart-preview" class="max-h-48 overflow-y-auto space-y-2 text-xs text-slate-300 pr-1">
-                                <div class="text-slate-500 italic py-2">當前分類無勾選品項</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100">
-            <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                <span>📸</span> 官方週邊圖
-            </h3>
-            <div class="bg-slate-50 p-2 rounded-xl flex justify-center items-center overflow-hidden">
-                <img src="weverse_2.jpg" alt="SHINee WORLD VIII 週邊示意圖" class="w-full h-auto rounded-lg shadow-sm max-w-4xl object-contain">
-            </div>
+        <div>
+            <label for="rateInput">設定當前匯率：</label>
+            <input type="number" id="rateInput" value="0.024" step="0.0001" oninput="calculateTotal()">
         </div>
     </div>
 
-    <script>
-        const products = [
-          {"id": 0, "nameEn": "INVERT POSTCARD SET", "nameZh": "巡演明信片組", "type": "現場/線上同步", "krw": 12000, "img": "goods/postcard.jpg"},
-          {"id": 1, "nameEn": "CARD WALLET SET", "nameZh": "證件卡夾鑰匙圈組", "type": "現場/線上同步", "krw": 55000, "img": "goods/wallet.jpg"},
-          {"id": 2, "nameEn": "ID PHOTO SET", "nameZh": "證件照照片組", "type": "現場/線上同步", "krw": 10000, "img": "goods/id_photo.jpg"},
-          {"id": 3, "nameEn": "BADGE", "nameZh": "巡演紀念金屬徽章", "type": "現場/線上同步", "krw": 10000, "img": "goods/badge.jpg"},
-          {"id": 4, "nameEn": "LONG SLEEVE SET", "nameZh": "黑色高質感長袖衛衣組", "type": "現場/線上同步", "krw": 65000, "img": "goods/long_sleeve.jpg"},
-          {"id": 5, "nameEn": "LENTICULAR IMAGE PICKET", "nameZh": "3D 變幻大扇子", "type": "現場/線上同步", "krw": 10000, "img": "goods/picket.jpg"},
-          {"id": 6, "nameEn": "REVERSIBLE TOTE BAG SET", "nameZh": "雙面用兩面托特包組", "type": "現場/線上同步", "krw": 65000, "img": "goods/tote_bag.jpg"},
-          {"id": 7, "nameEn": "RANDOM TRADING CARD SET", "nameZh": "隨機明星卡組", "type": "現場/線上同步", "krw": 6000, "img": "goods/trading_card.jpg"},
-          {"id": 8, "nameEn": "NECKLACE SET", "nameZh": "巡演限定設計項鍊組", "type": "預購限定", "krw": 47000, "img": "goods/necklace.jpg"},
-          {"id": 9, "nameEn": "OFFICIAL FANLIGHT", "nameZh": "官方手燈", "type": "現場/線上同步", "krw": 42000, "img": "goods/fanlight.jpg"},
-          {"id": 10, "nameEn": "MINI FANLIGHT KEYRING", "nameZh": "迷你手燈鑰匙圈", "type": "現場/線上同步", "krw": 19000, "img": "goods/keyring.jpg"},
-          {"id": 11, "nameEn": "T-SHIRT SET", "nameZh": "巡演短袖 T 恤 - 黑", "type": "現場/線上同步", "krw": 47000, "img": "goods/t_shirt.jpg"},
-          {"id": 12, "nameEn": "POSTER SET", "nameZh": "巡演海報組", "type": "現場/線上同步", "krw": 11000, "img": "goods/poster.jpg"},
-          {"id": 13, "nameEn": "PAPER INCENSE SET", "nameZh": "紙香氛禮盒組", "type": "預購限定", "krw": 42000, "img": "goods/incense.jpg"},
-          {"id": 14, "nameEn": "OFFICIAL LIGHT TOK", "nameZh": "手機發光氣墊支架", "type": "現場/線上同步", "krw": 27000, "img": "goods/light_tok.jpg"},
-          {"id": 15, "nameEn": "DIGITAL CLOCK", "nameZh": "角色數位時鐘", "type": "預購限定", "krw": 19000, "img": "goods/clock.jpg"},
-          {"id": 16, "nameEn": "RANDOM SQUISHY KEY RING", "nameZh": "隨機舒壓軟軟鑰匙圈", "type": "現場/線上同步", "krw": 10000, "img": "goods/squishy.jpg"},
-          {"id": 17, "nameEn": "HANDMADE FELT DOLL", "nameZh": "手作感毛氈布偶吊飾", "type": "預購限定", "krw": 22000, "img": "goods/felt_doll.jpg"},
-          {"id": 18, "nameEn": "PEEK-UP FIGURE", "nameZh": "趴姿公仔玩具", "type": "現場/線上同步", "krw": 15000, "img": "goods/figure.jpg"}
-        ];
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 45%;">週邊品項</th>
+                    <th style="width: 15%;">韓元單價</th>
+                    <th style="width: 15%;">預估台幣</th>
+                    <th style="width: 15%; text-align: center;">數量</th>
+                    <th style="width: 10%; text-align: right;">小計 (₩)</th>
+                </tr>
+            </thead>
+            <tbody id="mdTableBody">
+                <!-- 由 JavaScript 動態生成品項 -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-item">
+            <span class="label">總計金額 (KRW)</span>
+            <span class="value" id="totalKrw">₩0</span>
+            <span class="sub-value" id="bonusInfo">未達滿額小卡門檻</span>
+        </div>
+        <div class="summary-item">
+            <span class="label">估算總計 (TWD)</span>
+            <span class="value" id="totalTwd" style="color: var(--mint-primary);">$0</span>
+            <span class="sub-value">*不含海外運費與刷卡手續費</span>
+        </div>
+        <div class="summary-item">
+            <span class="label">預估獲得特典卡數量</span>
+            <span class="value" id="totalCards" style="color: #ff7675;">0 張</span>
+            <span class="sub-value" id="cardDetail">包含滿額卡與自帶卡</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 嚴謹代入官方公告的 12 款品項數據
+    const mdItems = [
+        { id: 1, name: "WIND BREAKER SET", spec: "薄荷綠連帽風衣組 (自帶專屬小卡x1)", price: 120000, hasCard: true },
+        { id: 2, name: "SHORT PANTS SET", spec: "薄荷綠休閒短褲組 (自帶專屬小卡x1)", price: 48000, hasCard: true },
+        { id: 3, name: "CROSS BAG", spec: "銀灰色防潑水半月斜背包", price: 45000, hasCard: false },
+        { id: 4, name: "T-SHIRT SET", spec: "純白排汗短袖T恤組 (自帶專屬小卡x1)", price: 45000, hasCard: true },
+        { id: 5, name: "FABRIC POSTER SET", spec: "成員各別款大布海報組 (自帶專屬小卡x1)", price: 32000, hasCard: true },
+        { id: 6, name: "DIY SUN CATCHER SET", spec: "拼接風手作太陽捕捉器 (自帶專屬小卡x1)", price: 25000, hasCard: true },
+        { id: 7, name: "RAINBOW 10CM DOLL", spec: "彩虹漸層色絨毛玩偶 (有福實款！)", price: 22000, hasCard: false },
+        { id: 8, name: "WATER BALL", spec: "角色漂浮夏日衝浪水晶球", price: 18000, hasCard: false },
+        { id: 9, name: "RANDOM SUNSHINE DOLL KEYRING", spec: "半透明角色果凍鑰匙圈盲盒", price: 15000, hasCard: false },
+        { id: 10, name: "SCRUNCHIE", spec: "絲質光澤薄荷綠大腸髮圈", price: 11000, hasCard: false },
+        { id: 11, name: "RANDOM TRADING CARD SET", spec: "官方未公開明星隨機小卡盲盒", price: 6000, hasCard: false },
+        { id: 12, name: "4X6 PHOTO SET", spec: "四位成員高畫質大照片寫真組", price: 5000, hasCard: false }
+    ];
+
+    const tableBody = document.getElementById('mdTableBody');
+
+    // 初始化渲染表格
+    function initTable() {
+        const rate = parseFloat(document.getElementById('rateInput').value) || 0.024;
+        tableBody.innerHTML = '';
         
-        const globalQuantities = {};
-        products.forEach(p => globalQuantities[p.id] = 0);
+        mdItems.forEach(item => {
+            const row = document.createElement('tr');
+            const twdPrice = Math.round(item.price * rate);
+            
+            row.innerHTML = `
+                <td>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-spec">${item.spec}</div>
+                    ${item.hasCard ? '<span class="bonus-badge">🎁 內附隨裝自拍卡</span>' : ''}
+                </td>
+                <td>₩${item.price.toLocaleString()}</td>
+                <td id="twd-price-${item.id}">$${twdPrice.toLocaleString()}</td>
+                <td style="text-align: center;">
+                    <input type="number" class="quantity-input" id="qty-${item.id}" value="0" min="0" oninput="calculateTotal()">
+                </td>
+                <td style="text-align: right; font-weight: 500;" id="subtotal-${item.id}">₩0</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
 
-        let currentFilter = 'all';
+    // 核心預算與滿額小卡累增邏輯計算
+    function calculateTotal() {
+        const rate = parseFloat(document.getElementById('rateInput').value) || 0.024;
+        let totalKrw = 0;
+        let builtInCards = 0;
+
+        mdItems.forEach(item => {
+            const qtyInput = document.getElementById(`qty-${item.id}`);
+            const qty = parseInt(qtyInput.value) || 0;
+            
+            // 防止輸入負數
+            if (qty < 0) { qtyInput.value = 0; }
+
+            // 更新單個品項預估台幣單價
+            const currentTwdPrice = Math.round(item.price * rate);
+            document.getElementById(`twd-price-${item.id}`).innerText = `$${currentTwdPrice.toLocaleString()}`;
+
+            // 計算小計
+            const subtotal = item.price * qty;
+            totalKrw += subtotal;
+            document.getElementById(`subtotal-${item.id}`).innerText = `₩${subtotal.toLocaleString()}`;
+
+            // 統計衣服/海報/捕夢網等「商品本體自帶」的小卡數量
+            if (item.hasCard) {
+                builtInCards += qty;
+            }
+        });
+
+        // 計算 70,000 韓元滿額特別自拍小卡累贈張數
+        const bonusCards = Math.floor(totalKrw / 70000);
+        const totalCards = builtInCards + bonusCards;
+        const totalTwd = Math.round(totalKrw * rate);
+
+        // 更新介面數值
+        document.getElementById('totalKrw').innerText = `₩${totalKrw.toLocaleString()}`;
+        document.getElementById('totalTwd').innerText = `$${totalTwd.toLocaleString()}`;
+        document.getElementById('totalCards').innerText = `${totalCards} 張`;
         
-        const staticRates = { "TWD": 0.0240, "JPY": 0.1120, "HKD": 0.0056 };
-        const currencySymbols = { "TWD": "NT$ ", "JPY": "¥ ", "HKD": "HK$ " };
-
-        function updateCountdown() {
-            const targetDate = new Date("2026-05-28T15:00:00+09:00");
-            const now = new Date();
-            const difference = targetDate - now;
-
-            const displayEl = document.getElementById("countdown-display");
-
-            if (difference <= 0) {
-                displayEl.innerHTML = "<span class='text-emerald-600 font-bold animate-pulse'>🎉 週邊已正式開賣！祝搶購順利！💎</span>";
-                return;
-            }
-
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-            const dStr = days > 0 ? `${days}天 ` : "";
-            const hStr = String(hours).padStart(2, "0");
-            const mStr = String(minutes).padStart(2, "0");
-            const sStr = String(seconds).padStart(2, "0");
-
-            // 調整為更精緻小巧的文字呈現
-            displayEl.innerHTML = `⏱️ ${dStr}${hStr} 小時 ${mStr} 分 ${sStr} 秒`;
+        // 特典小卡進度條文字提示
+        const bonusInfoText = document.getElementById('bonusInfo');
+        if (totalKrw === 0) {
+            bonusInfoText.innerText = "未達滿額小卡門檻";
+        } else if (totalKrw < 70000) {
+            const nextLevel = 70000 - totalKrw;
+            bonusInfoText.innerText = `還差 ₩${nextLevel.toLocaleString()} 即可獲得 1 張滿額特別卡！`;
+        } else {
+            const nextLevel = 70000 - (totalKrw % 70000);
+            bonusInfoText.innerText = `🎉 已達門檻！再湊 ₩${nextLevel.toLocaleString()} 多送 1 張！`;
         }
 
-        function handleCurrencyChange() {
-            const currentCurrency = document.getElementById('currency-select').value;
-            const defaultRate = staticRates[currentCurrency];
-            
-            document.getElementById('exchange-rate').value = defaultRate.toFixed(4);
-            
-            renderItems();
-            calculateTotal();
-        }
+        // 小卡組成明細提示
+        document.getElementById('cardDetail').innerText = `明細：商品內附卡 ${builtInCards} 張 + 線上滿額贈卡 ${bonusCards} 張`;
+    }
 
-        function renderItems() {
-            const container = document.getElementById('items-container');
-            container.innerHTML = '';
-            
-            const currentCurrency = document.getElementById('currency-select').value;
-            const symbol = currencySymbols[currentCurrency];
+    // 啟動
+    initTable();
+</script>
 
-            products.forEach(p => {
-                if (currentFilter === 'onsite' && p.type !== '現場/線上同步') return;
-                if (currentFilter === 'preorder' && p.type !== '預購限定') return;
-
-                const isPreOrder = (p.type === '預購限定');
-                const badgeColor = isPreOrder ? 'bg-amber-100 text-amber-800 border-amber-200' : 'bg-cyan-100 text-cyan-800 border-cyan-200';
-                const currentQty = globalQuantities[p.id];
-
-                const imgHtml = p.img 
-                    ? `<img src="${p.img}" alt="${p.nameZh}" onerror="this.src='';this.parentNode.innerHTML='💎';this.className='w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center text-xl shrink-0 border border-dashed border-slate-300'" class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg bg-slate-100 border border-slate-200 shrink-0 shadow-sm">`
-                    : `<div class="w-16 h-16 md:w-20 md:h-20 bg-slate-100 rounded-lg flex items-center justify-center text-xl shrink-0 border border-dashed border-slate-300">💎</div>`;
-
-                const row = document.createElement('div');
-                row.className = "flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-teal-200 hover:bg-teal-50/20 transition gap-4";
-                row.innerHTML = `
-                    <div class="flex items-center gap-4 flex-1">
-                        ${imgHtml}
-                        <div>
-                            <div class="font-bold text-slate-800 text-base">${p.nameEn}</div>
-                            <div class="text-sm text-slate-500 mt-0.5 mb-2">${p.nameZh}</div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs px-2 py-0.5 font-medium rounded-full border ${badgeColor}">${p.type}</span>
-                                <span class="text-xs text-slate-400">官方單價: ₩${p.krw.toLocaleString()}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between sm:justify-end gap-6">
-                        <div class="text-right sm:min-w-[120px]">
-                            <div class="font-bold text-slate-700" id="live-twd-${p.id}">${symbol}0</div>
-                            <div class="text-xs text-slate-400">估計單價</div>
-                        </div>
-                        <div class="flex items-center border border-slate-200 rounded-lg bg-white shadow-sm">
-                            <button onclick="changeQty(${p.id}, -1)" class="px-3 py-1 text-slate-500 hover:bg-slate-50 font-bold text-lg rounded-l-lg">-</button>
-                            <input type="number" id="qty-${p.id}" value="${currentQty}" min="0" max="99" oninput="validateAndCalc(${p.id})" class="w-12 text-center font-semibold bg-transparent focus:outline-none text-slate-800">
-                            <button onclick="changeQty(${p.id}, 1)" class="px-3 py-1 text-slate-500 hover:bg-slate-50 font-bold text-lg rounded-r-lg">+</button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(row);
-            });
-            updateLivePrices();
-        }
-
-        function filterItems(type) {
-            currentFilter = type;
-            
-            ['all', 'onsite', 'preorder'].forEach(t => {
-                const btn = document.getElementById(`btn-${t}`);
-                if (t === type) {
-                    btn.className = "px-3 py-1 text-sm font-medium rounded-full bg-teal-500 text-white shadow-sm transition";
-                } else {
-                    btn.className = "px-3 py-1 text-sm font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition";
-                }
-            });
-
-            const titleEl = document.getElementById('summary-title');
-            if(type === 'all') titleEl.innerText = "📊 預算統計摘要 (全部)";
-            if(type === 'onsite') titleEl.innerText = "📊 預算統計摘要 (現場線上)";
-            if(type === 'preorder') titleEl.innerText = "📊 預算統計摘要 (預購限定)";
-            
-            renderItems();
-            calculateTotal();
-        }
-
-        function changeQty(id, diff) {
-            let val = globalQuantities[id] || 0;
-            val += diff;
-            if (val < 0) val = 0;
-            if (val > 99) val = 99;
-            globalQuantities[id] = val;
-            
-            const input = document.getElementById(`qty-${id}`);
-            if (input) input.value = val;
-            
-            calculateTotal();
-        }
-
-        function validateAndCalc(id) {
-            const input = document.getElementById(`qty-${id}`);
-            if (!input) return;
-            let val = parseInt(input.value);
-            if (isNaN(val) || val < 0) val = 0;
-            if (val > 99) val = 99;
-            
-            globalQuantities[id] = val;
-            input.value = val;
-            calculateTotal();
-        }
-
-        function updateLivePrices() {
-            const rate = parseFloat(document.getElementById('exchange-rate').value) || 0.024;
-            const currentCurrency = document.getElementById('currency-select').value;
-            const symbol = currencySymbols[currentCurrency];
-            
-            products.forEach(p => {
-                const el = document.getElementById(`live-twd-${p.id}`);
-                if (el) {
-                    const liveConverted = p.krw * rate;
-                    const formatted = currentCurrency === 'TWD' ? Math.round(liveConverted).toLocaleString() : liveConverted.toFixed(1);
-                    el.innerText = `${symbol}${formatted}`;
-                }
-            });
-        }
-
-        function calculateTotal() {
-            const rate = parseFloat(document.getElementById('exchange-rate').value) || 0.024;
-            const useFee = document.getElementById('oversea-fee').checked;
-            const feeMultiplier = useFee ? 1.015 : 1.0;
-            const currentCurrency = document.getElementById('currency-select').value;
-            const symbol = currencySymbols[currentCurrency];
-
-            updateLivePrices();
-
-            let filterKrw = 0;
-            let filterTwd = 0;
-            let filterCount = 0;
-            let globalPreorderTwd = 0;
-            let globalOnsiteTwd = 0;
-
-            const cartPreview = document.getElementById('cart-preview');
-            cartPreview.innerHTML = '';
-
-            products.forEach(p => {
-                const qty = globalQuantities[p.id] || 0;
-                const itemKrw = p.krw * qty;
-                const itemTwd = itemKrw * rate * feeMultiplier;
-
-                if (p.type === '預購限定') {
-                    globalPreorderTwd += itemTwd;
-                } else {
-                    globalOnsiteTwd += itemTwd;
-                }
-
-                let isVisible = false;
-                if (currentFilter === 'all') isVisible = true;
-                if (currentFilter === 'onsite' && p.type === '現場/線上同步') isVisible = true;
-                if (currentFilter === 'preorder' && p.type === '預購限定') isVisible = true;
-
-                if (isVisible && qty > 0) {
-                    filterKrw += itemKrw;
-                    filterTwd += itemTwd;
-                    filterCount += qty;
-
-                    const displayPrice = currentCurrency === 'TWD' ? Math.round(itemTwd).toLocaleString() : itemTwd.toFixed(1);
-
-                    const itemPreview = document.createElement('div');
-                    itemPreview.className = "flex justify-between items-start py-1.5 border-b border-slate-800/40 text-[11px] gap-2";
-                    itemPreview.innerHTML = `
-                        <div class="truncate max-w-[170px]">
-                            <span class="font-semibold text-slate-200 block">${p.nameEn}</span>
-                            <span class="text-slate-400 block text-[10px]">${p.nameZh}</span>
-                        </div>
-                        <span class="font-medium text-teal-400 shrink-0 text-right">x${qty}<br><span class="text-slate-400 text-[10px]">${symbol}${displayPrice}</span></span>
-                    `;
-                    cartPreview.appendChild(itemPreview);
-                }
-            });
-
-            if (filterCount === 0) {
-                cartPreview.innerHTML = '<div class="text-slate-500 italic py-2">當前分類無購買品項</div>';
-            }
-
-            const finalFilterSum = currentCurrency === 'TWD' ? Math.round(filterTwd).toLocaleString() : filterTwd.toFixed(1);
-            const finalPreOrderSum = currentCurrency === 'TWD' ? Math.round(globalPreorderTwd).toLocaleString() : globalPreorderTwd.toFixed(1);
-            const finalOnsiteSum = currentCurrency === 'TWD' ? Math.round(globalOnsiteTwd).toLocaleString() : globalOnsiteTwd.toFixed(1);
-
-            document.getElementById('total-twd-label').innerText = `當前分類總計應付 (${currentCurrency})`;
-            document.getElementById('total-twd').innerText = `${symbol}${finalFilterSum}`;
-            document.getElementById('total-krw').innerText = `₩${filterKrw.toLocaleString()}`;
-            document.getElementById('total-count').innerText = `${filterCount} 件`;
-            
-            document.getElementById('preorder-twd').innerText = `${symbol}${finalPreOrderSum}`;
-            document.getElementById('onsite-twd').innerText = `${symbol}${finalOnsiteSum}`;
-        }
-
-        handleCurrencyChange();
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-    </script>
 </body>
 </html>
