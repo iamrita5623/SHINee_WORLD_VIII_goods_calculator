@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHINee SW8 [THE INVERT] 2nd MD 預算試算表</title>
+    <title>SHINee SW8 [THE INVERT] 2nd MD 智慧預算試算表</title>
     <style>
         :root {
             --mint-primary: #a3e2c9;
@@ -16,7 +16,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #f4f7f5;
             color: var(--text-color);
             margin: 0;
@@ -27,7 +27,7 @@
 
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 950px;
             background: var(--white);
             border-radius: 16px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
@@ -55,31 +55,56 @@
             font-size: 14px;
         }
 
-        .exchange-rate-box {
+        .control-panel {
             background-color: var(--mint-light);
             border: 1px solid var(--mint-primary);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 20px;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .currency-selector {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
-        .exchange-rate-box label {
-            font-weight: bold;
-            color: var(--charcoal-dark);
-        }
-
-        .exchange-rate-box input {
-            padding: 6px 10px;
+        .currency-btn {
+            background-color: var(--white);
             border: 1px solid var(--mint-dark);
+            color: var(--charcoal-dark);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .currency-btn.active {
+            background-color: var(--charcoal-dark);
+            border-color: var(--charcoal-dark);
+            color: var(--white);
+        }
+
+        .rates-config {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: var(--charcoal-light);
+            align-items: center;
+        }
+
+        .rates-config input {
+            width: 70px;
+            padding: 4px;
+            border: 1px solid #ccc;
             border-radius: 4px;
-            width: 80px;
             text-align: center;
-            font-size: 14px;
         }
 
         .table-responsive {
@@ -101,14 +126,36 @@
             font-weight: 500;
         }
 
-        th:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
-        th:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
-
         td {
             padding: 14px 12px;
             border-bottom: 1px solid #eeeeee;
             font-size: 14px;
             vertical-align: middle;
+        }
+
+        .product-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .img-container {
+            display: flex;
+            gap: 4px;
+        }
+
+        .thumb-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            background-color: #fafafa;
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
         }
 
         .item-name {
@@ -119,21 +166,33 @@
         .item-spec {
             font-size: 12px;
             color: #777;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         .quantity-input {
-            width: 60px;
+            width: 55px;
             padding: 6px;
             border: 1px solid #cccccc;
             border-radius: 4px;
             text-align: center;
         }
 
-        .quantity-input:focus {
-            outline: none;
-            border-color: var(--mint-dark);
-            box-shadow: 0 0 0 2px var(--mint-light);
+        .buy-link {
+            display: inline-block;
+            background-color: var(--mint-light);
+            color: #27ae60;
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid var(--mint-primary);
+            transition: background 0.2s;
+        }
+
+        .buy-link:hover {
+            background-color: var(--mint-primary);
+            color: var(--charcoal-dark);
         }
 
         .summary-card {
@@ -142,7 +201,7 @@
             border-radius: 12px;
             padding: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
@@ -170,22 +229,9 @@
             margin-top: 4px;
         }
 
-        .bonus-badge {
-            background-color: #ff7675;
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-            display: inline-block;
-            margin-top: 4px;
-        }
-
-        @media (max-width: 600px) {
-            body { padding: 10px; }
-            .container { padding: 16px; }
-            th, td { padding: 10px 6px; font-size: 13px; }
-            .summary-card { grid-template-columns: 1fr; gap: 16px; }
+        @media (max-width: 768px) {
+            .product-cell { flex-direction: column; align-items: flex-start; gap: 8px; }
+            td, th { padding: 10px 6px; font-size: 13px; }
         }
     </style>
 </head>
@@ -194,16 +240,22 @@
 <div class="container">
     <header>
         <h1>SHINee WORLD VIII [THE INVERT] 2nd MD 試算表</h1>
-        <p>夢幻薄荷綠夏日遠征 ‧ 專屬預算與滿額特典計算工具</p>
+        <p>多幣別即時換算 ‧ 完整圖像化預算小幫手</p>
     </header>
 
-    <div class="exchange-rate-box">
-        <div>
-            <strong>💡 特典提醒：</strong> 線上單筆滿 70,000 ₩ 即可累贈 1 張特別版自拍小卡（可完全累贈）
+    <div class="control-panel">
+        <div class="currency-selector">
+            <strong>切換顯示貨幣：</strong>
+            <button class="currency-btn active" onclick="changeCurrency('TWD')">新台幣 (TWD)</button>
+            <button class="currency-btn" onclick="changeCurrency('HKD')">港幣 (HKD)</button>
+            <button class="currency-btn" onclick="changeCurrency('JPY')">日幣 (JPY)</button>
         </div>
-        <div>
-            <label for="rateInput">設定當前匯率：</label>
-            <input type="number" id="rateInput" value="0.024" step="0.0001" oninput="calculateTotal()">
+        <div class="rates-config">
+            <span>自訂韓元匯率 ➡️ </span>
+            <label>TWD: <input type="number" id="rate-TWD" value="0.024" step="0.0001" oninput="updateCalculations()"></label>
+            <label>HKD: <input type="number" id="rate-HKD" value="0.0058" step="0.0001" oninput="updateCalculations()"></label>
+            <label>JPY: <input type="number" id="rate-JPY" value="0.112" step="0.001" oninput="updateCalculations()"></label>
+            <span style="color: #777;">(預設基準：1 韓元換算值)</span>
         </div>
     </div>
 
@@ -211,15 +263,16 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width: 45%;">週邊品項</th>
+                    <th style="width: 40%;">商品與小卡預覽</th>
                     <th style="width: 15%;">韓元單價</th>
-                    <th style="width: 15%;">預估台幣</th>
-                    <th style="width: 15%; text-align: center;">數量</th>
+                    <th style="width: 15%;" id="currency-th-title">預估台幣</th>
+                    <th style="width: 10%; text-align: center;">數量</th>
+                    <th style="width: 10%; text-align: center;">購買</th>
                     <th style="width: 10%; text-align: right;">小計 (₩)</th>
                 </tr>
             </thead>
             <tbody id="mdTableBody">
-                <!-- 由 JavaScript 動態生成品項 -->
+                <!-- 由 JS 動態代入品項 -->
             </tbody>
         </table>
     </div>
@@ -231,119 +284,153 @@
             <span class="sub-value" id="bonusInfo">未達滿額小卡門檻</span>
         </div>
         <div class="summary-item">
-            <span class="label">估算總計 (TWD)</span>
-            <span class="value" id="totalTwd" style="color: var(--mint-primary);">$0</span>
-            <span class="sub-value">*不含海外運費與刷卡手續費</span>
+            <span class="label">切換幣別總計</span>
+            <span class="value" id="totalConverted" style="color: var(--mint-primary);">$0 TWD</span>
+            <span class="sub-value">*未包含海外運費與海外刷卡手續費</span>
         </div>
         <div class="summary-item">
-            <span class="label">預估獲得特典卡數量</span>
+            <span class="label">預估獲得特典卡總數</span>
             <span class="value" id="totalCards" style="color: #ff7675;">0 張</span>
-            <span class="sub-value" id="cardDetail">包含滿額卡與自帶卡</span>
+            <span class="sub-value" id="cardDetail">明細：本體 0 + 滿額 0</span>
         </div>
     </div>
 </div>
 
 <script>
-    // 嚴謹代入官方公告的 12 款品項數據
+    // 匯率與貨幣全域狀態
+    let currentCurrency = 'TWD';
+    
+    // 清純化官方 12 款品項數據，拿掉括號備註，並保留圖片路徑與連結位置
     const mdItems = [
-        { id: 1, name: "WIND BREAKER SET", spec: "薄荷綠連帽風衣組 (自帶專屬小卡x1)", price: 120000, hasCard: true },
-        { id: 2, name: "SHORT PANTS SET", spec: "薄荷綠休閒短褲組 (自帶專屬小卡x1)", price: 48000, hasCard: true },
-        { id: 3, name: "CROSS BAG", spec: "銀灰色防潑水半月斜背包", price: 45000, hasCard: false },
-        { id: 4, name: "T-SHIRT SET", spec: "純白排汗短袖T恤組 (自帶專屬小卡x1)", price: 45000, hasCard: true },
-        { id: 5, name: "FABRIC POSTER SET", spec: "成員各別款大布海報組 (自帶專屬小卡x1)", price: 32000, hasCard: true },
-        { id: 6, name: "DIY SUN CATCHER SET", spec: "拼接風手作太陽捕捉器 (自帶專屬小卡x1)", price: 25000, hasCard: true },
-        { id: 7, name: "RAINBOW 10CM DOLL", spec: "彩虹漸層色絨毛玩偶 (有福實款！)", price: 22000, hasCard: false },
-        { id: 8, name: "WATER BALL", spec: "角色漂浮夏日衝浪水晶球", price: 18000, hasCard: false },
-        { id: 9, name: "RANDOM SUNSHINE DOLL KEYRING", spec: "半透明角色果凍鑰匙圈盲盒", price: 15000, hasCard: false },
-        { id: 10, name: "SCRUNCHIE", spec: "絲質光澤薄荷綠大腸髮圈", price: 11000, hasCard: false },
-        { id: 11, name: "RANDOM TRADING CARD SET", spec: "官方未公開明星隨機小卡盲盒", price: 6000, hasCard: false },
-        { id: 12, name: "4X6 PHOTO SET", spec: "四位成員高畫質大照片寫真組", price: 5000, hasCard: false }
+        { id: 1, name: "WIND BREAKER SET", spec: "薄荷綠連帽風衣組", price: 120000, hasCard: true, imgProd: "images/prod_wind.jpg", imgCard: "images/card_wind.jpg" },
+        { id: 2, name: "SHORT PANTS SET", spec: "薄荷綠休閒短褲組", price: 48000, hasCard: true, imgProd: "images/prod_pants.jpg", imgCard: "images/card_pants.jpg" },
+        { id: 3, name: "CROSS BAG", spec: "銀灰色防潑水半月斜背包", price: 45000, hasCard: false, imgProd: "images/prod_bag.jpg", imgCard: "" },
+        { id: 4, name: "T-SHIRT SET", spec: "純白排汗短袖T恤組", price: 45000, hasCard: true, imgProd: "images/prod_tshirt.jpg", imgCard: "images/card_tshirt.jpg" },
+        { id: 5, name: "FABRIC POSTER SET", spec: "大布海報組", price: 32000, hasCard: true, imgProd: "images/prod_poster.jpg", imgCard: "images/card_poster.jpg" },
+        { id: 6, name: "DIY SUN CATCHER SET", spec: "手作太陽捕捉器", price: 25000, hasCard: true, imgProd: "images/prod_suncatcher.jpg", imgCard: "images/card_suncatcher.jpg" },
+        { id: 7, name: "RAINBOW 10CM DOLL", spec: "彩虹版絨毛玩偶", price: 22000, hasCard: false, imgProd: "images/prod_doll.jpg", imgCard: "" },
+        { id: 8, name: "WATER BALL", spec: "角色漂浮水晶球", price: 18000, hasCard: false, imgProd: "images/prod_wball.jpg", imgCard: "" },
+        { id: 9, name: "RANDOM SUNSHINE DOLL KEYRING", spec: "隨機角色果凍鑰匙圈", price: 15000, hasCard: false, imgProd: "images/prod_keyring.jpg", imgCard: "" },
+        { id: 10, name: "SCRUNCHIE", spec: "薄荷綠大腸髮圈", price: 11000, hasCard: false, imgProd: "images/prod_scrunchie.jpg", imgCard: "" },
+        { id: 11, name: "RANDOM TRADING CARD SET", spec: "隨機明星小卡盲盒", price: 6000, hasCard: false, imgProd: "images/prod_trcard.jpg", imgCard: "" },
+        { id: 12, name: "4X6 PHOTO SET", spec: "4X6大照片寫真組", price: 5000, hasCard: false, imgProd: "images/prod_photo.jpg", imgCard: "" }
     ];
 
     const tableBody = document.getElementById('mdTableBody');
 
-    // 初始化渲染表格
-    function initTable() {
-        const rate = parseFloat(document.getElementById('rateInput').value) || 0.024;
+    // 初始化動態渲染表格
+    function renderTable() {
         tableBody.innerHTML = '';
-        
         mdItems.forEach(item => {
             const row = document.createElement('tr');
-            const twdPrice = Math.round(item.price * rate);
+            
+            // 預留圖片區塊：如果沒有小卡圖片就不顯示小卡預覽格
+            const cardImgHtml = item.hasCard ? `<img src="${item.imgCard}" alt="小卡" class="thumb-img" onerror="this.style.display='none'">` : '';
             
             row.innerHTML = `
                 <td>
-                    <div class="item-name">${item.name}</div>
-                    <div class="item-spec">${item.spec}</div>
-                    ${item.hasCard ? '<span class="bonus-badge">🎁 內附隨裝自拍卡</span>' : ''}
+                    <div class="product-cell">
+                        <div class="img-container">
+                            <img src="${item.imgProd}" alt="商品" class="thumb-img" onerror="this.style.display='none'">
+                            ${cardImgHtml}
+                        </div>
+                        <div class="item-info">
+                            <span class="item-name">${item.name}</span>
+                            <span class="item-spec">${item.spec}</span>
+                        </div>
+                    </div>
                 </td>
                 <td>₩${item.price.toLocaleString()}</td>
-                <td id="twd-price-${item.id}">$${twdPrice.toLocaleString()}</td>
+                <td id="converted-price-${item.id}">$0</td>
                 <td style="text-align: center;">
-                    <input type="number" class="quantity-input" id="qty-${item.id}" value="0" min="0" oninput="calculateTotal()">
+                    <input type="number" class="quantity-input" id="qty-${item.id}" value="0" min="0" oninput="updateCalculations()">
+                </td>
+                <td style="text-align: center;">
+                    <a href="https://linktr.ee/SHINee_merch" target="_blank" class="buy-link">購買</a>
                 </td>
                 <td style="text-align: right; font-weight: 500;" id="subtotal-${item.id}">₩0</td>
             `;
             tableBody.appendChild(row);
         });
+        updateCalculations();
     }
 
-    // 核心預算與滿額小卡累增邏輯計算
-    function calculateTotal() {
-        const rate = parseFloat(document.getElementById('rateInput').value) || 0.024;
+    // 切換目標顯示貨幣
+    function changeCurrency(currencyCode) {
+        currentCurrency = currencyCode;
+        
+        // 切換按鈕 active 樣式
+        document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        // 更新表頭標題文字
+        const titleMap = { 'TWD': '預估台幣', 'HKD': '預估港幣', 'JPY': '預估日幣' };
+        document.getElementById('currency-th-title').innerText = titleMap[currencyCode];
+        
+        updateCalculations();
+    }
+
+    // 核心匯率與小卡累增防線運算
+    function updateCalculations() {
+        const rate = parseFloat(document.getElementById(`rate-${currentCurrency}`).value) || 0;
         let totalKrw = 0;
         let builtInCards = 0;
 
         mdItems.forEach(item => {
             const qtyInput = document.getElementById(`qty-${item.id}`);
             const qty = parseInt(qtyInput.value) || 0;
-            
-            // 防止輸入負數
-            if (qty < 0) { qtyInput.value = 0; }
+            if (qty < 0) qtyInput.value = 0;
 
-            // 更新單個品項預估台幣單價
-            const currentTwdPrice = Math.round(item.price * rate);
-            document.getElementById(`twd-price-${item.id}`).innerText = `$${currentTwdPrice.toLocaleString()}`;
+            // 計算當前貨幣單價
+            const convertedPrice = Math.round(item.price * rate * 100) / 100; // 保留兩位小數或四捨五入
+            const displayPrice = currentCurrency === 'JPY' ? Math.round(item.price * rate) : convertedPrice;
+            document.getElementById(`converted-price-${item.id}`).innerText = `${currentCurrency === 'JPY' ? '¥' : '$'}${displayPrice.toLocaleString()}`;
 
-            // 計算小計
+            // 計算韓元小計
             const subtotal = item.price * qty;
             totalKrw += subtotal;
             document.getElementById(`subtotal-${item.id}`).innerText = `₩${subtotal.toLocaleString()}`;
 
-            // 統計衣服/海報/捕夢網等「商品本體自帶」的小卡數量
+            // 統計本體卡
             if (item.hasCard) {
                 builtInCards += qty;
             }
         });
 
-        // 計算 70,000 韓元滿額特別自拍小卡累贈張數
+        // 滿 70,000 韓元累贈 1 張線上特典卡
         const bonusCards = Math.floor(totalKrw / 70000);
         const totalCards = builtInCards + bonusCards;
-        const totalTwd = Math.round(totalKrw * rate);
-
-        // 更新介面數值
-        document.getElementById('totalKrw').innerText = `₩${totalKrw.toLocaleString()}`;
-        document.getElementById('totalTwd').innerText = `$${totalTwd.toLocaleString()}`;
-        document.getElementById('totalCards').innerText = `${totalCards} 張`;
         
-        // 特典小卡進度條文字提示
+        // 總和換算貨幣計算
+        let totalConvertedValue = totalKrw * rate;
+        if (currentCurrency === 'JPY' || currentCurrency === 'TWD') {
+            totalConvertedValue = Math.round(totalConvertedValue);
+        } else {
+            totalConvertedValue = totalConvertedValue.toFixed(2);
+        }
+
+        // 更新底端看版
+        document.getElementById('totalKrw').innerText = `₩${totalKrw.toLocaleString()}`;
+        document.getElementById('totalConverted').innerText = `${currentCurrency === 'JPY' ? '¥' : '$'}${Number(totalConvertedValue).toLocaleString()} ${currentCurrency}`;
+        document.getElementById('totalCards').innerText = `${totalCards} 張`;
+
+        // 滿額卡進度條提示文字
         const bonusInfoText = document.getElementById('bonusInfo');
         if (totalKrw === 0) {
             bonusInfoText.innerText = "未達滿額小卡門檻";
         } else if (totalKrw < 70000) {
             const nextLevel = 70000 - totalKrw;
-            bonusInfoText.innerText = `還差 ₩${nextLevel.toLocaleString()} 即可獲得 1 張滿額特別卡！`;
+            bonusInfoText.innerText = `還差 ₩${nextLevel.toLocaleString()} 即可多拿 1 張滿額特別卡！`;
         } else {
             const nextLevel = 70000 - (totalKrw % 70000);
-            bonusInfoText.innerText = `🎉 已達門檻！再湊 ₩${nextLevel.toLocaleString()} 多送 1 張！`;
+            bonusInfoText.innerText = `🎉 已達門檻！再湊 ₩${nextLevel.toLocaleString()} 多送 1 張線上卡！`;
         }
 
-        // 小卡組成明細提示
         document.getElementById('cardDetail').innerText = `明細：商品內附卡 ${builtInCards} 張 + 線上滿額贈卡 ${bonusCards} 張`;
     }
 
-    // 啟動
-    initTable();
+    // 頁面啟動
+    renderTable();
 </script>
 
 </body>
