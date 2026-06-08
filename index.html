@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHINee SW8 [THE INVERT] 智慧追星行程與記帳系統</title>
+    <title>SHINee Mini 6th [Atmos] MD 試算表</title>
     <style>
         :root {
             --mint-primary: #a3e2c9;
@@ -118,7 +118,7 @@
         .products-section {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
 
         /* 單個商品卡片樣式 */
@@ -128,7 +128,7 @@
             justify-content: space-between;
             border: 1px solid #eeeeee;
             border-radius: 12px;
-            padding: 16px;
+            padding: 14px 16px;
             background-color: var(--white);
             transition: transform 0.2s, box-shadow 0.2s;
         }
@@ -151,8 +151,8 @@
         }
 
         .thumb-img {
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             object-fit: cover;
             border-radius: 8px;
             border: 1px solid #e0e0e0;
@@ -166,20 +166,21 @@
 
         .item-name {
             font-weight: bold;
-            font-size: 16px;
+            font-size: 15px;
             color: var(--charcoal-dark);
         }
 
         .item-spec {
             font-size: 13px;
             color: #666;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         .price-tag {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--charcoal-light);
             margin-top: 2px;
+            font-weight: 500;
         }
 
         .action-area {
@@ -200,9 +201,9 @@
         .qty-btn {
             background: #f5f5f5;
             border: none;
-            width: 32px;
-            height: 32px;
-            font-size: 16px;
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
             cursor: pointer;
             font-weight: bold;
             color: var(--charcoal-dark);
@@ -214,32 +215,14 @@
         }
 
         .qty-input {
-            width: 40px;
-            height: 32px;
+            width: 38px;
+            height: 30px;
             border: none;
             border-left: 1px solid #ccc;
             border-right: 1px solid #ccc;
             text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .buy-link {
-            display: inline-block;
-            background-color: var(--mint-light);
-            color: #27ae60;
-            padding: 7px 12px;
-            border-radius: 6px;
-            text-decoration: none;
             font-size: 13px;
             font-weight: bold;
-            border: 1px solid var(--mint-primary);
-            transition: all 0.2s;
-        }
-
-        .buy-link:hover {
-            background-color: var(--mint-primary);
-            color: var(--charcoal-dark);
         }
 
         /* 右側固定側邊欄：即時結帳看板 */
@@ -265,7 +248,7 @@
         }
 
         .cart-items-list {
-            max-height: 220px;
+            max-height: 200px;
             overflow-y: auto;
             margin-bottom: 16px;
             font-size: 13px;
@@ -298,12 +281,12 @@
         }
 
         .summary-row .value {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
         }
 
         .summary-row .converted-value {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: bold;
             color: var(--mint-primary);
         }
@@ -313,7 +296,7 @@
             border: 1px dashed var(--mint-primary);
             border-radius: 8px;
             padding: 10px;
-            margin-top: 8px;
+            margin-top: 4px;
             font-size: 12px;
         }
 
@@ -336,6 +319,26 @@
             margin-top: 4px;
         }
 
+        /* 整合後的統一購買大按鈕 */
+        .global-buy-btn {
+            display: block;
+            background-color: #27ae60;
+            color: var(--white);
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 16px;
+            border: 1px solid #219653;
+            transition: background 0.2s;
+        }
+
+        .global-buy-btn:hover {
+            background-color: #219653;
+        }
+
         /* 捲軸美化 */
         .cart-items-list::-webkit-scrollbar { width: 6px; }
         .cart-items-list::-webkit-scrollbar-thumb { background-color: var(--charcoal-light); border-radius: 3px; }
@@ -350,8 +353,8 @@
 
 <div class="container">
     <header>
-        <h1>SHINee WORLD VIII [THE INVERT] 智慧記帳系統</h1>
-        <p>清單、功能、與多幣別即時換算同步追星小工具</p>
+        <h1>SHINee Mini 6th [Atmos] MD 智慧記帳系統</h1>
+        <p>多幣別即時換算 ‧ 智慧追星清單與預算管理小幫手</p>
     </header>
 
     <!-- 頂部匯率變更面板 -->
@@ -372,12 +375,12 @@
 
     <!-- 主控版塊 -->
     <div class="main-layout">
-        <!-- 左側：商品選擇區 -->
+        <!-- 左側：商品選擇區 (已移除獨立購買按鈕) -->
         <div class="products-section" id="productsContainer">
             <!-- 由 JavaScript 動態注入 12 款完美去標籤商品卡片 -->
         </div>
 
-        <!-- 右側：固定結帳側邊欄 -->
+        <!-- 右側：固定結帳側邊欄 (整合統一購買連結) -->
         <div class="cart-sidebar">
             <div class="sidebar-title">🛒 即時清單明細</div>
             
@@ -411,13 +414,15 @@
                         未達滿額小卡門檻
                     </div>
                 </div>
+
+                <!-- 統一集中的官方購買大按鈕 -->
+                <a href="https://linktr.ee/SHINee_merch" target="_blank" class="global-buy-btn">前往 Linktree 官方賣場</a>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // 當前選取貨幣代碼
     let currentCurrency = 'TWD';
 
     // 完美洗淨備註標籤後的 12 款官方完整商品清單
@@ -430,13 +435,12 @@
         { id: 6, name: "DIY SUN CATCHER SET", spec: "手作太陽捕捉器", price: 25000, hasCard: true, imgProd: "images/prod_suncatcher.jpg", imgCard: "images/card_suncatcher.jpg" },
         { id: 7, name: "RAINBOW 10CM DOLL", spec: "彩虹版絨毛玩偶", price: 22000, hasCard: false, imgProd: "images/prod_doll.jpg", imgCard: "" },
         { id: 8, name: "WATER BALL", spec: "角色漂浮水晶球", price: 18000, hasCard: false, imgProd: "images/prod_wball.jpg", imgCard: "" },
-        { id: 9, name: "RANDOM SUNSHINE DOLL KEYRING", spec: "隨機角色果凍鑰苔圈", price: 15000, hasCard: false, imgProd: "images/prod_keyring.jpg", imgCard: "" },
+        { id: 9, name: "RANDOM SUNSHINE DOLL KEYRING", spec: "隨機角色果凍鑰匙圈", price: 15000, hasCard: false, imgProd: "images/prod_keyring.jpg", imgCard: "" },
         { id: 10, name: "SCRUNCHIE", spec: "薄荷綠大腸髮圈", price: 11000, hasCard: false, imgProd: "images/prod_scrunchie.jpg", imgCard: "" },
         { id: 11, name: "RANDOM TRADING CARD SET", spec: "隨機明星小卡盲盒", price: 6000, hasCard: false, imgProd: "images/prod_trcard.jpg", imgCard: "" },
         { id: 12, name: "4X6 PHOTO SET", spec: "4X6大照片寫真組", price: 5000, hasCard: false, imgProd: "images/prod_photo.jpg", imgCard: "" }
     ];
 
-    // 用於記錄用戶各品項購買數量的字典物件
     let cartQuantities = {};
     mdItems.forEach(item => cartQuantities[item.id] = 0);
 
@@ -449,7 +453,6 @@
             const card = document.createElement('div');
             card.className = 'product-card';
             
-            // 預留商品與小卡預覽區塊，支援 onerror 自動隱藏防破圖
             const cardImgHtml = item.hasCard ? `<img src="${item.imgCard}" alt="小卡" class="thumb-img" onerror="this.style.display='none'">` : '';
             
             card.innerHTML = `
@@ -471,14 +474,12 @@
                         <input type="number" class="qty-input" id="input-qty-${item.id}" value="0" min="0" oninput="setQty(${item.id}, this.value)">
                         <button class="qty-btn" onclick="adjustQty(${item.id}, 1)">+</button>
                     </div>
-                    <a href="https://linktr.ee/SHINee_merch" target="_blank" class="buy-link">購買</a>
                 </div>
             `;
             productsContainer.appendChild(card);
         });
     }
 
-    // 加減按鈕控制
     function adjustQty(itemId, change) {
         let currentQty = cartQuantities[itemId];
         let newQty = currentQty + change;
@@ -489,7 +490,6 @@
         updateAllTotals();
     }
 
-    // 直接鍵盤輸入控制
     function setQty(itemId, value) {
         let newQty = parseInt(value) || 0;
         if (newQty < 0) newQty = 0;
@@ -498,22 +498,18 @@
         updateAllTotals();
     }
 
-    // 切換當前結帳所採用的顯示貨幣
     function changeCurrency(currencyCode) {
         currentCurrency = currencyCode;
         
-        // 變更按鈕高亮樣式
         document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById(`btn-${currencyCode}`).classList.add('active');
         
-        // 變更看板文字標題
         const titleMap = { 'TWD': '換算總計 (TWD)', 'HKD': '換算總計 (HKD)', 'JPY': '換算總計 (JPY)' };
         document.getElementById('convertedLabel').innerText = titleMap[currencyCode];
         
         updateAllTotals();
     }
 
-    // 核心處理：明細表刷新、貨幣轉換、以及7萬韓元小卡累增與進度提示
     function updateAllTotals() {
         const rate = parseFloat(document.getElementById(`rate-${currentCurrency}`).value) || 0;
         const cartItemsList = document.getElementById('cartItemsList');
@@ -534,7 +530,6 @@
                     builtInCards += qty;
                 }
 
-                // 渲染右側清單列
                 const row = document.createElement('div');
                 row.className = 'cart-item-row';
                 row.innerHTML = `
@@ -549,11 +544,9 @@
             cartItemsList.innerHTML = `<div style="color: #888; text-align: center; padding-top: 20px;">尚未選購任何品項</div>`;
         }
 
-        // 滿 70,000 韓元完全累贈
         const bonusCards = Math.floor(totalKrw / 70000);
         const totalCards = builtInCards + bonusCards;
 
-        // 計算目標顯示幣值（日幣、台幣整數，港幣保留二位小數）
         let convertedTotal = totalKrw * rate;
         if (currentCurrency === 'JPY' || currentCurrency === 'TWD') {
             convertedTotal = Math.round(convertedTotal);
@@ -561,13 +554,11 @@
             convertedTotal = convertedTotal.toFixed(2);
         }
 
-        // 渲染底端更新看板
         document.getElementById('totalKrw').innerText = `₩${totalKrw.toLocaleString()}`;
         document.getElementById('totalConverted').innerText = `${currentCurrency === 'JPY' ? '¥' : '$'}${Number(convertedTotal).toLocaleString()} ${currentCurrency}`;
         document.getElementById('totalCardsCount').innerText = `${totalCards} 張`;
         document.getElementById('cardDetailsSummary').innerText = `商品內附: ${builtInCards} 張 | 線上滿額贈: ${bonusCards} 張`;
 
-        // 計算滿額進度提示
         const progressText = document.getElementById('bonusProgressText');
         if (totalKrw === 0) {
             progressText.innerText = "未達滿額小卡門檻";
@@ -580,7 +571,6 @@
         }
     }
 
-    // 啟動初始化
     renderProductList();
 </script>
 
