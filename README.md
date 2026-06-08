@@ -1,1 +1,1 @@
-# SHINee_WORLD_VIII_goods_calculator
+# SHINee_goods_calculator
