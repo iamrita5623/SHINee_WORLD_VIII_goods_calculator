@@ -55,7 +55,6 @@
             font-size: 14px;
         }
 
-        /* 頂部控制面板與匯率切換 */
         .control-panel {
             background-color: var(--mint-light);
             border: 1px solid var(--mint-primary);
@@ -108,7 +107,7 @@
             text-align: center;
         }
 
-        /* 主控佈局：左側品項清單，右側即時購物車明細 */
+        /* 主控佈局 */
         .main-layout {
             display: grid;
             grid-template-columns: 1fr 340px;
@@ -121,7 +120,6 @@
             gap: 12px;
         }
 
-        /* 單個商品卡片樣式 */
         .product-card {
             display: flex;
             align-items: center;
@@ -225,16 +223,22 @@
             font-weight: bold;
         }
 
-        /* 右側固定側邊欄：即時結帳看板 */
+        /* 右側固定側邊欄 */
         .cart-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .sidebar-card {
             background-color: var(--charcoal-dark);
             color: var(--white);
             border-radius: 16px;
             padding: 20px;
             box-sizing: border-box;
-            height: fit-content;
-            position: sticky;
-            top: 20px;
         }
 
         .sidebar-title {
@@ -319,7 +323,6 @@
             margin-top: 4px;
         }
 
-        /* 整合後的統一購買大按鈕 */
         .global-buy-btn {
             display: block;
             background-color: #27ae60;
@@ -339,7 +342,33 @@
             background-color: #219653;
         }
 
-        /* 捲軸美化 */
+        /* 🆕 新增：底端官方大圖海報區塊 */
+        .official-banner-card {
+            background-color: var(--white);
+            border: 1px solid #eeeeee;
+            border-radius: 16px;
+            padding: 16px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .official-banner-card h3 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: var(--charcoal-light);
+            text-align: left;
+            border-left: 3px solid var(--mint-dark);
+            padding-left: 8px;
+        }
+
+        .banner-img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            background-color: #fafafa;
+        }
+
         .cart-items-list::-webkit-scrollbar { width: 6px; }
         .cart-items-list::-webkit-scrollbar-thumb { background-color: var(--charcoal-light); border-radius: 3px; }
 
@@ -357,7 +386,6 @@
         <p>多幣別即時換算 ‧ 智慧追星清單與預算管理小幫手</p>
     </header>
 
-    <!-- 頂部匯率變更面板 -->
     <div class="control-panel">
         <div class="currency-selector">
             <strong>目前結帳顯示貨幣：</strong>
@@ -373,50 +401,44 @@
         </div>
     </div>
 
-    <!-- 主控版塊 -->
     <div class="main-layout">
-        <!-- 左側：商品選擇區 (已移除獨立購買按鈕) -->
-        <div class="products-section" id="productsContainer">
-            <!-- 由 JavaScript 動態注入 12 款完美去標籤商品卡片 -->
-        </div>
+        <div class="products-section" id="productsContainer"></div>
 
-        <!-- 右側：固定結帳側邊欄 (整合統一購買連結) -->
         <div class="cart-sidebar">
-            <div class="sidebar-title">🛒 即時清單明細</div>
-            
-            <!-- 選中商品明細 -->
-            <div class="cart-items-list" id="cartItemsList">
-                <div style="color: #888; text-align: center; padding-top: 20px;">尚未選購任何品項</div>
+            <div class="sidebar-card">
+                <div class="sidebar-title">🛒 即時清單明細</div>
+                <div class="cart-items-list" id="cartItemsList">
+                    <div style="color: #888; text-align: center; padding-top: 20px;">尚未選購任何品項</div>
+                </div>
+
+                <div class="summary-block">
+                    <div class="summary-row">
+                        <span class="label">總計金額 (KRW)</span>
+                        <span class="value" id="totalKrw">₩0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label" id="convertedLabel">換算總計 (TWD)</span>
+                        <span class="converted-value" id="totalConverted">$0 TWD</span>
+                    </div>
+                    <div class="bonus-status-box">
+                        <div class="bonus-title">
+                            <span>預估獲得特典卡</span>
+                            <span id="totalCardsCount" style="font-size: 16px;">0 張</span>
+                        </div>
+                        <div id="cardDetailsSummary" style="color: #b0b5b2; margin-bottom: 6px;">
+                            商品內附: 0 張 | 線上滿額贈: 0 張
+                        </div>
+                        <div id="bonusProgressText" style="color: var(--mint-primary); border-top: 1px dashed #4a4e4b; padding-top: 6px;">
+                            未達滿額小卡門檻
+                        </div>
+                    </div>
+                    <a href="https://linktr.ee/SHINee_merch" target="_blank" class="global-buy-btn">前往 Linktree 官方賣場</a>
+                </div>
             </div>
 
-            <!-- 預算與小卡累增統計區 -->
-            <div class="summary-block">
-                <div class="summary-row">
-                    <span class="label">總計金額 (KRW)</span>
-                    <span class="value" id="totalKrw">₩0</span>
-                </div>
-                
-                <div class="summary-row">
-                    <span class="label" id="convertedLabel">換算總計 (TWD)</span>
-                    <span class="converted-value" id="totalConverted">$0 TWD</span>
-                </div>
-
-                <!-- 滿額小卡累增計算盒 -->
-                <div class="bonus-status-box">
-                    <div class="bonus-title">
-                        <span>預估獲得特典卡</span>
-                        <span id="totalCardsCount" style="font-size: 16px;">0 張</span>
-                    </div>
-                    <div id="cardDetailsSummary" style="color: #b0b5b2; margin-bottom: 6px;">
-                        商品內附: 0 張 | 線上滿額贈: 0 張
-                    </div>
-                    <div id="bonusProgressText" style="color: var(--mint-primary); border-top: 1px dashed #4a4e4b; padding-top: 6px;">
-                        未達滿額小卡門檻
-                    </div>
-                </div>
-
-                <!-- 統一集中的官方購買大按鈕 -->
-                <a href="https://linktr.ee/SHINee_merch" target="_blank" class="global-buy-btn">前往 Linktree 官方賣場</a>
+            <div class="official-banner-card">
+                <h3>📋 官方公告大圖參考</h3>
+                <img src="images/official_banner.jpg" alt="官方公告宣傳大圖" class="banner-img" onerror="this.alt='⚠️ 請將官方大圖命名為 official_banner.jpg 放進 images 資料夾中即可顯示！'; this.style.color='#999'; this.style.fontSize='12px';">
             </div>
         </div>
     </div>
@@ -425,7 +447,6 @@
 <script>
     let currentCurrency = 'TWD';
 
-    // 完美洗淨備註標籤後的 12 款官方完整商品清單
     const mdItems = [
         { id: 1, name: "WIND BREAKER SET", spec: "薄荷綠連帽風衣組", price: 120000, hasCard: true, imgProd: "images/prod_wind.jpg", imgCard: "images/card_wind.jpg" },
         { id: 2, name: "SHORT PANTS SET", spec: "薄荷綠休閒短褲組", price: 48000, hasCard: true, imgProd: "images/prod_pants.jpg", imgCard: "images/card_pants.jpg" },
@@ -446,7 +467,6 @@
 
     const productsContainer = document.getElementById('productsContainer');
 
-    // 動態建置購物清單介面
     function renderProductList() {
         productsContainer.innerHTML = '';
         mdItems.forEach(item => {
@@ -500,13 +520,11 @@
 
     function changeCurrency(currencyCode) {
         currentCurrency = currencyCode;
-        
         document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById(`btn-${currencyCode}`).classList.add('active');
         
         const titleMap = { 'TWD': '換算總計 (TWD)', 'HKD': '換算總計 (HKD)', 'JPY': '換算總計 (JPY)' };
         document.getElementById('convertedLabel').innerText = titleMap[currencyCode];
-        
         updateAllTotals();
     }
 
