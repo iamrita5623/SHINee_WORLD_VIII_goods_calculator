@@ -117,16 +117,16 @@
         .products-section {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 16px;
         }
 
+        /* 🆕 全新垂直排列卡片樣式（字在上、圖在下） */
         .product-card {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            flex-direction: column; /* 改為由上至下垂直排版 */
             border: 1px solid #eeeeee;
             border-radius: 12px;
-            padding: 14px 16px;
+            padding: 16px;
             background-color: var(--white);
             transition: transform 0.2s, box-shadow 0.2s;
             gap: 12px;
@@ -137,26 +137,12 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.04);
         }
 
-        .product-details {
+        /* 上層：文字訊息區 */
+        .product-top-info {
             display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .img-container {
-            display: flex;
-            gap: 6px;
-            position: relative;
-        }
-
-        .thumb-img {
-            width: 45px;
-            height: 45px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 1px solid #e0e0e0;
-            background-color: #fafafa;
-            flex-shrink: 0;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
         }
 
         .item-info {
@@ -166,29 +152,54 @@
 
         .item-name {
             font-weight: bold;
-            font-size: 15px;
+            font-size: 16px;
             color: var(--charcoal-dark);
         }
 
         .item-spec {
             font-size: 13px;
             color: #666;
-            margin-top: 3px;
+            margin-top: 4px;
         }
 
         .price-tag {
-            font-size: 13px;
+            font-size: 14px;
             color: var(--charcoal-light);
-            margin-top: 2px;
-            font-weight: 500;
+            margin-top: 4px;
+            font-weight: bold;
+        }
+
+        /* 下層：圖片與計數器區 */
+        .product-bottom-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        .img-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* 縮放尺寸最佳化：兼顧寬度且保證不被壓扁 */
+        .thumb-img {
+            width: 55px;
+            height: 55px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            background-color: #fafafa;
+            flex-shrink: 0; /* 鎖死不縮小 */
         }
 
         .action-area {
             display: flex;
             align-items: center;
-            gap: 12px;
         }
 
+        /* 鎖死寬度：完美解決破框掉行問題 */
         .qty-counter {
             display: flex;
             align-items: center;
@@ -196,7 +207,7 @@
             border-radius: 6px;
             overflow: hidden;
             background-color: var(--white);
-            width: 105px;
+            width: 105px; /* 固定的安全寬度 */
             height: 32px;
         }
 
@@ -227,16 +238,15 @@
             font-size: 13px;
             font-weight: bold;
             box-sizing: border-box;
-    -moz-appearance: textfield;
+            -moz-appearance: textfield;
         }
 
-/* 移除 Chrome/Safari 預設的輸入框數字小箭頭 */
-.qty-input::-webkit-outer-spin-button,
-.qty-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-        
+        .qty-input::-webkit-outer-spin-button,
+        .qty-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
         /* 右側固定側邊欄 */
         .cart-sidebar {
             display: flex;
@@ -329,12 +339,12 @@
         .bonus-badge-inline {
             background-color: #ff7675;
             color: white;
-            padding: 1px 5px;
-            border-radius: 3px;
-            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 11px;
             font-weight: bold;
             display: inline-block;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
         .global-buy-btn {
@@ -356,7 +366,6 @@
             background-color: #219653;
         }
 
-        /* 🆕 新增：底端官方大圖海報區塊 */
         .official-banner-card {
             background-color: var(--white);
             border: 1px solid #eeeeee;
@@ -396,7 +405,7 @@
 
 <div class="container">
     <header>
-        <h1>SHINee Mini 6th [Atmos] MD 試算</h1>
+        <h1>SHINee Mini 6th [Atmos] MD 試算表</h1>
         <p>多幣別即時換算 ‧ 智慧追星清單與預算管理小幫手</p>
     </header>
 
@@ -416,8 +425,10 @@
     </div>
 
     <div class="main-layout">
+        <!-- 左側：商品選擇區 (字在上、圖在下) -->
         <div class="products-section" id="productsContainer"></div>
 
+        <!-- 右側：側邊欄連動與大圖區 -->
         <div class="cart-sidebar">
             <div class="sidebar-card">
                 <div class="sidebar-title">🛒 即時清單明細</div>
@@ -481,6 +492,7 @@
 
     const productsContainer = document.getElementById('productsContainer');
 
+    // 🆕 重新編排 HTML 注入結構：字在上，圖與按鈕在下
     function renderProductList() {
         productsContainer.innerHTML = '';
         mdItems.forEach(item => {
@@ -490,23 +502,27 @@
             const cardImgHtml = item.hasCard ? `<img src="${item.imgCard}" alt="小卡" class="thumb-img" onerror="this.style.display='none'">` : '';
             
             card.innerHTML = `
-                <div class="product-details">
-                    <div class="img-container">
-                        <img src="${item.imgProd}" alt="商品" class="thumb-img" onerror="this.style.display='none'">
-                        ${cardImgHtml}
-                    </div>
+                <!-- 上層：文字與標籤 -->
+                <div class="product-top-info">
                     <div class="item-info">
                         <span class="item-name">${item.name}</span>
                         <span class="item-spec">${item.spec}</span>
                         <span class="price-tag">₩${item.price.toLocaleString()}</span>
-                        ${item.hasCard ? '<div><span class="bonus-badge-inline">隨裝自拍卡</span></div>' : ''}
                     </div>
+                    ${item.hasCard ? '<div><span class="bonus-badge-inline">隨裝自拍卡</span></div>' : ''}
                 </div>
-                <div class="action-area">
-                    <div class="qty-counter">
-                        <button class="qty-btn" onclick="adjustQty(${item.id}, -1)">-</button>
-                        <input type="number" class="qty-input" id="input-qty-${item.id}" value="0" min="0" oninput="setQty(${item.id}, this.value)">
-                        <button class="qty-btn" onclick="adjustQty(${item.id}, 1)">+</button>
+                <!-- 下層：圖片排左、加減鈕排右 -->
+                <div class="product-bottom-layout">
+                    <div class="img-container">
+                        <img src="${item.imgProd}" alt="商品" class="thumb-img" onerror="this.style.display='none'">
+                        ${cardImgHtml}
+                    </div>
+                    <div class="action-area">
+                        <div class="qty-counter">
+                            <button class="qty-btn" onclick="adjustQty(${item.id}, -1)">-</button>
+                            <input type="number" class="qty-input" id="input-qty-${item.id}" value="0" min="0" oninput="setQty(${item.id}, this.value)">
+                            <button class="qty-btn" onclick="adjustQty(${item.id}, 1)">+</button>
+                        </div>
                     </div>
                 </div>
             `;
